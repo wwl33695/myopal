@@ -133,7 +133,8 @@
 //
 
 #undef P_DYNALINK
-#undef P_PLUGINMGR
+//#undef P_PLUGINMGR
+#define P_PLUGINMGR 1
 #undef P_PLUGINS
 #undef P_DEFAULT_PLUGIN_DIR
 
@@ -292,7 +293,8 @@
 #undef P_AUDIO
 #undef P_VIDEO
 
-#undef P_TIMERS
+//#undef P_TIMERS
+#define P_TIMERS 1          
 #undef P_REGEX
 #undef P_TTS
 #undef P_ASN
@@ -310,12 +312,18 @@
 #undef P_POP3SMTP
 #undef P_CONFIG_FILE
 #undef P_CYPHER
-#undef P_VARTYPE
-#undef P_GUID
+//#undef P_VARTYPE
+#define P_VARTYPE 1
+//#undef P_GUID
+#define P_GUID 1
+#define P_GETDATETAB_NOTGENERATED 0
+#define P_USE_INLINES 0 
+
 #if P_GUID
   #undef P_SPOOLDIR
 #endif
-#undef P_SYSTEMLOG
+//#undef P_SYSTEMLOG
+#define P_SYSTEMLOG 1
 #undef P_CHANNEL_UTILS
 #undef P_NETWORKING
 

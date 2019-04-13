@@ -92,6 +92,8 @@
 
 #define USE_SOCKETS
 
+#include <ptclib/cypher.h>
+
 extern "C" {
 
 #include <openssl/ssl.h>
@@ -160,7 +162,8 @@ static PString PSSLError(unsigned long err = ERR_peek_error())
 class PSSL_BIO
 {
   public:
-    PSSL_BIO(BIO_METHOD *method = BIO_s_file_internal())
+    PSSL_BIO(BIO_METHOD *method = (BIO_METHOD *)BIO_s_file())
+//    PSSL_BIO(BIO_METHOD *method = BIO_s_file_internal())
       { bio = BIO_new(method); }
 
     ~PSSL_BIO()

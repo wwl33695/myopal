@@ -7629,6 +7629,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -11517,8 +11531,8 @@ fi
 
 
       if test "x${enableval}" = "xyes" && \
-             test "x$HAS_DNS_RESOLVER" != "x1" && \
-             test "x$HAS_DNS_RESOLVER" != "xyes"; then :
+             test "x$HAS_DNS_RESOLVER" != "x1" && \
+             test "x$HAS_DNS_RESOLVER" != "xyes"; then :
 
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency HAS_DNS_RESOLVER
 =$HAS_DNS_RESOLVER
@@ -13059,6 +13073,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -13133,6 +13161,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -13218,6 +13260,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -13314,6 +13370,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -13400,6 +13470,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -13485,6 +13569,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -13559,6 +13657,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -13635,6 +13747,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -13709,6 +13835,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -13795,6 +13935,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -13880,6 +14034,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -13954,6 +14122,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -14030,6 +14212,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -14105,6 +14301,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -14179,6 +14389,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -14265,6 +14489,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -14350,6 +14588,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -14424,6 +14676,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -14521,8 +14787,8 @@ fi
 
 
       if test "x${enableval}" = "xyes" && \
-             test "x$HAS_TTS" != "x1" && \
-             test "x$HAS_TTS" != "xyes"; then :
+             test "x$HAS_TTS" != "x1" && \
+             test "x$HAS_TTS" != "xyes"; then :
 
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency HAS_TTS
    =$HAS_TTS
@@ -14629,6 +14895,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -14724,6 +15004,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -14800,6 +15094,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -14874,6 +15182,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -14960,6 +15282,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -15043,6 +15379,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -15117,6 +15467,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -15193,6 +15557,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -15267,6 +15645,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -15343,6 +15735,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -15417,6 +15823,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -15493,6 +15913,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -15567,6 +16001,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -15663,6 +16111,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -15737,6 +16199,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -15813,6 +16289,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -15887,6 +16377,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -15973,6 +16477,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -16052,6 +16570,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -16143,6 +16675,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -16239,6 +16785,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -16324,6 +16884,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -16399,6 +16973,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -16473,6 +17061,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -16804,8 +17406,8 @@ fi
 
 
       if test "x${enableval}" = "xyes" && \
-             test "x$HAS_VIDEO" != "x1" && \
-             test "x$HAS_VIDEO" != "xyes"; then :
+             test "x$HAS_VIDEO" != "x1" && \
+             test "x$HAS_VIDEO" != "xyes"; then :
 
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency HAS_VIDEO
 =$HAS_VIDEO
@@ -18098,6 +18700,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -18384,6 +19000,20 @@ fi
 
 
 
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
+
 
 
 
@@ -18468,6 +19098,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 
@@ -19412,6 +20056,20 @@ fi
 
 
 
+
+      if test "x${enableval}" = "xyes" && \
+             test "x$" != "x1" && \
+             test "x$" != "xyes"; then :
+
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled due to disabled dependency
+   =$
+   " >&5
+$as_echo "disabled due to disabled dependency
+   =$
+   " >&6; }
+         enableval=no
+
+fi
 
 
 

@@ -84,10 +84,19 @@ else # OS
     ABI = Mach-O
     HOST_CONFIG_PARAM := --enable-ios=simulator
   else ifeq ($(OS),Windows_NT)
-    CPU := i686
-    VENDOR := mingw32
-#    ABI=i686
-  	HOST := i686-mingw32
+
+    ifeq ($(MINGW_PREFIX),/mingw32)
+        CPU := i686
+        VENDOR := mingw32
+    #    ABI=i686
+        HOST := i686-mingw32
+    else ifeq ($(MINGW_PREFIX),/mingw64)
+        CPU := x86_64
+        VENDOR := mingw64
+    #    ABI=i686
+        HOST := x86_64-mingw64
+    endif
+
   else ifeq ($(CPU),)
     $(error Must define a CPU for OS=$(OS))
   endif

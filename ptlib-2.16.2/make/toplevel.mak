@@ -466,7 +466,8 @@ ifeq ($(target_os),mingw)
   SOURCES += $(PLATFORM_SRC_DIR)/ptlib.cxx \
              $(PLATFORM_SRC_DIR)/win32.cxx \
              $(PLATFORM_SRC_DIR)/dllmain.cxx \
-             $(COMMON_SRC_DIR)/pchannel.cxx
+             $(COMMON_SRC_DIR)/pchannel.cxx \
+             $(COMMON_SRC_DIR)/wincfg.cxx
 else
   SOURCES += $(PLATFORM_SRC_DIR)/udll.cxx \
              $(PLATFORM_SRC_DIR)/channel.cxx \
@@ -489,6 +490,7 @@ SOURCES	+= \
 	$(PLATFORM_SRC_DIR)/assert.cxx \
 	$(COMMON_SRC_DIR)/collect.cxx \
 	$(COMMON_SRC_DIR)/contain.cxx \
+  $(COMMON_SRC_DIR)/syslog.cxx \
 	$(COMMON_SRC_DIR)/object.cxx   # must be last module
 
 ifneq ($(HAS_REGEX),1)
