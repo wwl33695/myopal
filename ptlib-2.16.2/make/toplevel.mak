@@ -219,7 +219,7 @@ endif # HAS_VIDEO
 
 ## SOUND DRIVERS
 ## Note this is mostly handled by the plugin system
-ifeq ($(HAS_AUDIO),1)
+#ifeq ($(HAS_AUDIO),1)
 
   SOURCES += $(COMMON_SRC_DIR)/sound.cxx 
 
@@ -235,7 +235,7 @@ ifeq ($(HAS_AUDIO),1)
     SOURCES += $(PLATFORM_SRC_DIR)/macaudio.mm
   endif # Darwin
 
-endif  # HAS_AUDIO
+#endif  # HAS_AUDIO
 
 
 ## Various modules
@@ -437,17 +437,17 @@ ifeq ($(HAS_SYSTEMLOG),1)
   SOURCES += $(COMPONENT_SRC_DIR)/syslog.cxx
 endif
 
-ifeq ($(HAS_PLUGINMGR),1)
+#ifeq ($(HAS_PLUGINMGR),1)
   SOURCES += $(COMMON_SRC_DIR)/pluginmgr.cxx
-endif
+#endif
 
-ifeq ($(HAS_CHANNEL_UTILS),1)
+#ifeq ($(HAS_CHANNEL_UTILS),1)
   SOURCES += $(COMPONENT_SRC_DIR)/qchannel.cxx \
              $(COMPONENT_SRC_DIR)/delaychan.cxx \
              $(COMPONENT_SRC_DIR)/memfile.cxx
-endif
+#endif
 
-ifeq ($(HAS_NETWORKING),1)
+#ifeq ($(HAS_NETWORKING),1)
   SOURCES += $(COMPONENT_SRC_DIR)/ipacl.cxx \
              $(COMPONENT_SRC_DIR)/inetprot.cxx \
              $(COMMON_SRC_DIR)/psockbun.cxx \
@@ -460,7 +460,7 @@ ifeq ($(HAS_NETWORKING),1)
     SOURCES += $(PLATFORM_SRC_DIR)/uicmp.cxx \
                $(PLATFORM_SRC_DIR)/socket.cxx
   endif
-endif
+#endif
 
 ifeq ($(target_os),mingw)
   SOURCES += $(PLATFORM_SRC_DIR)/ptlib.cxx \
