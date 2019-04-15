@@ -802,7 +802,7 @@ bool PHTTPClient::ConnectURL(const PURL & url)
         return false;
       }
 
-      ssl = new PSSLChannel(context, true);
+      ssl = new PSSLChannel(context, (PBoolean)true);
       if (ssl->Connect(tcp))
         break;
 

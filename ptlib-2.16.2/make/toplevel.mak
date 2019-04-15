@@ -371,16 +371,16 @@ endif
   SOURCES += $(COMPONENT_SRC_DIR)/url.cxx 
 #endif
 
-ifeq ($(HAS_HTTP),1)
+#ifeq ($(HAS_HTTP),1)
   SOURCES += $(COMPONENT_SRC_DIR)/http.cxx \
              $(COMPONENT_SRC_DIR)/httpclnt.cxx \
              $(COMPONENT_SRC_DIR)/html.cxx \
              $(COMPONENT_SRC_DIR)/httpsrvr.cxx
 
-  ifeq ($(HAS_SSDP),1)
+#  ifeq ($(HAS_SSDP),1)
     SOURCES += $(COMPONENT_SRC_DIR)/ssdp.cxx
-  endif
-endif
+#  endif
+#endif
 
 ifeq ($(HAS_HTTPFORMS),1)
   SOURCES += $(COMPONENT_SRC_DIR)/httpform.cxx
@@ -395,14 +395,14 @@ ifeq ($(HAS_HTTPSVC),1)
   endif
 endif
 
-ifeq ($(HAS_CONFIG_FILE),1)
+#ifeq ($(HAS_CONFIG_FILE),1)
   ifeq ($(target_os),mingw)
     SOURCES += $(PLATFORM_SRC_DIR)/wincfg.cxx \
                $(COMMON_SRC_DIR)/pconfig.cxx
   else
     SOURCES += $(PLATFORM_SRC_DIR)/config.cxx 
   endif
-endif
+#endif
 
 ifeq ($(HAS_VIDFILE),1)
   SOURCES += $(COMPONENT_SRC_DIR)/pvidfile.cxx \
@@ -421,9 +421,9 @@ ifeq ($(HAS_VARTYPE),1)
   SOURCES += $(COMPONENT_SRC_DIR)/vartype.cxx
 endif
 
-ifeq ($(HAS_GUID),1)
+#ifeq ($(HAS_GUID),1)
   SOURCES += $(COMPONENT_SRC_DIR)/guid.cxx
-endif
+#endif
 
 ifeq ($(HAS_SCRIPTS),1)
   SOURCES += $(COMPONENT_SRC_DIR)/script.cxx
@@ -466,8 +466,7 @@ ifeq ($(target_os),mingw)
   SOURCES += $(PLATFORM_SRC_DIR)/ptlib.cxx \
              $(PLATFORM_SRC_DIR)/win32.cxx \
              $(PLATFORM_SRC_DIR)/dllmain.cxx \
-             $(COMMON_SRC_DIR)/pchannel.cxx \
-             $(COMMON_SRC_DIR)/wincfg.cxx 
+             $(COMMON_SRC_DIR)/pchannel.cxx 
 else
   SOURCES += $(PLATFORM_SRC_DIR)/udll.cxx \
              $(PLATFORM_SRC_DIR)/channel.cxx \

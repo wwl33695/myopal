@@ -349,18 +349,23 @@
 
 #define P_URL 1
 //#undef P_URL
-
 #ifdef P_URL
-  #undef P_VCARD
-  #undef P_HTTP
+  #define P_VCARD 1
+//  #undef P_VCARD
+  #define P_HTTP 1
+//  #undef P_HTTP
   #if P_HTTP
+    #define P_CONFIG_FILE 1
     #if P_CONFIG_FILE
-      #undef P_HTTPFORMS
+      #define P_HTTPFORMS 1
+//      #undef P_HTTPFORMS
       #if P_HTTPFORMS
-        #undef P_HTTPSVC
+        #define P_HTTPSVC 1
+//        #undef P_HTTPSVC
       #endif
     #endif
-    #undef P_SSDP
+    #define P_SSDP 1
+//    #undef P_SSDP
   #endif
 #endif
 
