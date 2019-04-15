@@ -37,6 +37,7 @@
 #if OPAL_HAS_IM
 
 #include <ptclib/url.h>
+#include <ptclib/mime.h>
 #include <opal//transports.h>
 
 

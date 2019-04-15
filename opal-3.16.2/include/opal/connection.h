@@ -47,6 +47,7 @@
 #include <opal/transports.h>
 #include <ptclib/dtmf.h>
 #include <ptlib/safecoll.h>
+#include <ptclib/mime.h>
 #include <rtp/rtp.h>
 
 #if OPAL_SCRIPT
