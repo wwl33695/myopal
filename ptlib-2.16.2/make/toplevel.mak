@@ -309,17 +309,17 @@ ifeq ($(HAS_CLI),1)
   SOURCES += $(COMPONENT_SRC_DIR)/cli.cxx
 endif
 
-ifeq ($(HAS_NAT),1)
+#ifeq ($(HAS_NAT),1)
   SOURCES += $(COMPONENT_SRC_DIR)/pnat.cxx
-endif
+#endif
 
-ifeq ($(HAS_STUN),1)
+#ifeq ($(HAS_STUN),1)
   SOURCES += $(COMPONENT_SRC_DIR)/pstun.cxx
-endif
+#endif
 
-ifeq ($(HAS_STUNSRVR),1)
+#ifeq ($(HAS_STUNSRVR),1)
   SOURCES += $(COMPONENT_SRC_DIR)/pstunsrvr.cxx
-endif
+#endif
 
 
 ifeq ($(HAS_SOCKS),1)

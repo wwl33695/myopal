@@ -336,11 +336,14 @@
   #undef P_SNMP
 #endif
 
-#undef P_NAT
+#define P_NAT 1
+//#undef P_NAT
 #if P_NAT
-  #undef P_STUN
+  #define P_STUN 1
+//  #undef P_STUN
   #if P_STUN
-    #undef P_STUNSRVR
+    #define P_STUNSRVR 1
+//    #undef P_STUNSRVR
   #endif
 #endif
 
