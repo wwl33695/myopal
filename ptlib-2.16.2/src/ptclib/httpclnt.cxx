@@ -32,6 +32,7 @@
 
 #if P_HTTP
 
+#include <ptlib/object.h>
 #include <ptlib/sockets.h>
 #include <ptclib/http.h>
 #include <ptclib/guid.h>
@@ -802,7 +803,7 @@ bool PHTTPClient::ConnectURL(const PURL & url)
         return false;
       }
 
-      ssl = new PSSLChannel(context, (PBoolean)true);
+      ssl = new PSSLChannel(context, true);
       if (ssl->Connect(tcp))
         break;
 
