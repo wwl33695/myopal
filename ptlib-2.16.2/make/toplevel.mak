@@ -467,7 +467,7 @@ ifeq ($(target_os),mingw)
              $(PLATFORM_SRC_DIR)/win32.cxx \
              $(PLATFORM_SRC_DIR)/dllmain.cxx \
              $(COMMON_SRC_DIR)/pchannel.cxx \
-             $(COMMON_SRC_DIR)/wincfg.cxx
+             $(COMMON_SRC_DIR)/wincfg.cxx 
 else
   SOURCES += $(PLATFORM_SRC_DIR)/udll.cxx \
              $(PLATFORM_SRC_DIR)/channel.cxx \
@@ -475,6 +475,7 @@ else
              $(PLATFORM_SRC_DIR)/tlib.cxx
 endif
 
+GETDATE_TAB_C = $(COMMON_SRC_DIR)/getdate.tab.c
 GETDATE_SOURCE = $(COMMON_SRC_DIR)/getdate.c
 CLEAN_FILES = $(GETDATE_SOURCE)
 
@@ -485,13 +486,15 @@ SOURCES	+= \
 	$(COMPONENT_SRC_DIR)/notifier_ext.cxx \
 	$(COMMON_SRC_DIR)/safecoll.cxx \
 	$(COMMON_SRC_DIR)/ptime.cxx \
-	$(GETDATE_SOURCE) \
 	$(COMMON_SRC_DIR)/osutils.cxx \
 	$(PLATFORM_SRC_DIR)/assert.cxx \
 	$(COMMON_SRC_DIR)/collect.cxx \
 	$(COMMON_SRC_DIR)/contain.cxx \
   $(COMMON_SRC_DIR)/syslog.cxx \
-	$(COMMON_SRC_DIR)/object.cxx   # must be last module
+  $(GETDATE_SOURCE) \
+  $(COMMON_SRC_DIR)/object.cxx   # must be last module
+#  $(GETDATE_TAB_C) \
+#  $(GETDATE_SOURCE) \
 
 ifneq ($(HAS_REGEX),1)
   OBJS = $(OBJDIR)/regcomp.o $(OBJDIR)/regexec.o $(OBJDIR)/regerror.o $(OBJDIR)/regfree.o
@@ -527,8 +530,6 @@ $(OBJDIR)/getdate.o: $(GETDATE_SOURCE)
 
 $(DEPDIR)/getdate.dep: $(GETDATE_SOURCE)
 	$(Q_CC)$(CC) $(CPPFLAGS) -M $< >> $@
-
-GETDATE_TAB_C := $(COMMON_SRC_DIR)/getdate.tab.c
 
 $(GETDATE_SOURCE): $(GETDATE_TAB_C)
 	cp $< $@
