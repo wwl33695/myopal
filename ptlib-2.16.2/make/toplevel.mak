@@ -475,7 +475,6 @@ else
              $(PLATFORM_SRC_DIR)/tlib.cxx
 endif
 
-GETDATE_TAB_C = $(COMMON_SRC_DIR)/getdate.tab.c
 GETDATE_SOURCE = $(COMMON_SRC_DIR)/getdate.c
 CLEAN_FILES = $(GETDATE_SOURCE)
 
@@ -491,9 +490,7 @@ SOURCES	+= \
 	$(COMMON_SRC_DIR)/collect.cxx \
 	$(COMMON_SRC_DIR)/contain.cxx \
   $(COMMON_SRC_DIR)/syslog.cxx \
-  $(GETDATE_SOURCE) \
   $(COMMON_SRC_DIR)/object.cxx   # must be last module
-#  $(GETDATE_TAB_C) \
 #  $(GETDATE_SOURCE) \
 
 ifneq ($(HAS_REGEX),1)

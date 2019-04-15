@@ -747,7 +747,7 @@ void PTime::ReadFrom(istream & strm)
   struct tm timeBuf;
   time(&now);
   strm >> ws;
-  m_microSecondsSinceEpoch.store(PTimeParse(&strm, os_localtime(&now, &timeBuf), GetTimeZone(StandardTime))*Micro);
+//  m_microSecondsSinceEpoch.store(PTimeParse(&strm, os_localtime(&now, &timeBuf), GetTimeZone(StandardTime))*Micro);
 }
 
 
