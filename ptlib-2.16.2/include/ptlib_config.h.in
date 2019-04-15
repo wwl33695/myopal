@@ -344,7 +344,9 @@
   #endif
 #endif
 
-#undef P_URL
+#define P_URL 1
+//#undef P_URL
+
 #ifdef P_URL
   #undef P_VCARD
   #undef P_HTTP

@@ -367,9 +367,9 @@ ifeq ($(HAS_POP3SMTP),1)
   SOURCES += $(COMPONENT_SRC_DIR)/inetmail.cxx 
 endif
 
-ifeq ($(HAS_URL),1)
+#ifeq ($(HAS_URL),1)
   SOURCES += $(COMPONENT_SRC_DIR)/url.cxx 
-endif
+#endif
 
 ifeq ($(HAS_HTTP),1)
   SOURCES += $(COMPONENT_SRC_DIR)/http.cxx \
