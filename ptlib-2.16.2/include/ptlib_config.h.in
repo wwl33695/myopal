@@ -311,7 +311,8 @@
 #undef P_SERIAL
 #undef P_POP3SMTP
 #undef P_CONFIG_FILE
-#undef P_CYPHER
+//#undef P_CYPHER
+#define P_CYPHER 1
 //#undef P_VARTYPE
 #define P_VARTYPE 1
 //#undef P_GUID

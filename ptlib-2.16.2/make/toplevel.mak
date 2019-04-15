@@ -413,9 +413,9 @@ ifeq ($(HAS_FFVDEV),1)
   SOURCES += $(COMPONENT_SRC_DIR)/pffvdev.cxx
 endif
 
-ifeq ($(HAS_CYPHER),1)
+#ifeq ($(HAS_CYPHER),1)
   SOURCES += $(COMPONENT_SRC_DIR)/cypher.cxx
-endif
+#endif
 
 ifeq ($(HAS_VARTYPE),1)
   SOURCES += $(COMPONENT_SRC_DIR)/vartype.cxx
