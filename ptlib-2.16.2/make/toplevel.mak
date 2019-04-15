@@ -190,7 +190,7 @@ ifeq ($(HAS_ODBC),1)
 endif
 
 
-ifeq ($(HAS_VIDEO),1)
+#ifeq ($(HAS_VIDEO),1)
 
   SOURCES += $(COMMON_SRC_DIR)/vfakeio.cxx \
              $(COMMON_SRC_DIR)/videoio.cxx \
@@ -207,15 +207,15 @@ ifeq ($(HAS_VIDEO),1)
     SOURCES += $(PLATFORM_SRC_DIR)/vfw.cxx
   endif
 
-  ifeq ($(HAS_DIRECTSHOW),1)
+#  ifeq ($(HAS_DIRECTSHOW),1)
     SOURCES += $(PLATFORM_SRC_DIR)/directshow.cxx
-  endif
+#  endif
 
   ifeq ($(target_os),Darwin)
     SOURCES += $(PLATFORM_SRC_DIR)/macvidcap.mm
   endif # Darwin
 
-endif # HAS_VIDEO
+#endif # HAS_VIDEO
 
 ## SOUND DRIVERS
 ## Note this is mostly handled by the plugin system
