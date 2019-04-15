@@ -83,10 +83,6 @@
 #pragma implementation "pssl.h"
 #endif
 
-#include <ptlib.h>
-
-#include <ptclib/pssl.h>
-#include <ptclib/mime.h>
 
 #if P_SSL
 
@@ -108,6 +104,11 @@ extern "C" {
 #endif
 };
 
+#include <ptlib.h>
+
+#include <ptclib/pssl.h>
+#include <ptclib/mime.h>
+
 #if (OPENSSL_VERSION_NUMBER < 0x00906000)
   #error OpenSSL too old!
 #endif
@@ -116,7 +117,6 @@ extern "C" {
   #pragma comment(lib, P_SSL_LIB1)
   #pragma comment(lib, P_SSL_LIB2)
 #endif
-
 
 // On Windows, use a define from the header to guess the API type
 #ifdef _WIN32
@@ -1028,6 +1028,7 @@ void PAESContext::Decrypt(const void * in, void * out)
 
 PSSLCipherContext::PSSLCipherContext(bool encrypt)
   : m_padMode(PadPKCS)
+//  , m_context(EVP_CIPHER_CTX_new())
   , m_context(new EVP_CIPHER_CTX)
 {
   EVP_CIPHER_CTX_init(m_context);
