@@ -65,8 +65,8 @@ static const unsigned MaxConsecutiveErrors = 100;
 #elif HAS_SRTP_SRTP_H
   #include <srtp/srtp.h>
 #else
-  #include <srtp2/srtp.h>
-//  #include <srtp.h>
+//  #include <srtp2/srtp.h>
+  #include <srtp.h>
 #endif
 
 
