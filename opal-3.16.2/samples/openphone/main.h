@@ -39,6 +39,9 @@
 #include <ptlib_wx.h>
 #include <opal/manager.h>
 
+// Note, include this after everything else so gets all the conversions
+#include <ptlib/wxstring.h>
+
 #ifndef OPAL_PTLIB_AUDIO
   #error Cannot compile without PTLib sound channel support!
 #endif
@@ -56,9 +59,6 @@
 #include <t38/t38proto.h>
 #include <im/im_ep.h>
 #include <h224/h224.h>
-
-// Note, include this after everything else so gets all the conversions
-#include <ptlib/wxstring.h>
 
 
 class MyManager;
