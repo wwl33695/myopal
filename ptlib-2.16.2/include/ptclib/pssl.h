@@ -482,7 +482,7 @@ class PSSLDiffieHellman : public PObject
 
     /**Get internal OpenSSL DH structure.
       */
-    operator dh_st *() const { return m_dh; }
+    operator void *() const { return m_dh; }
 
     /**Load Diffie-Hellman parameters from file.
        The type of the file can be specified explicitly, or if
@@ -523,7 +523,8 @@ class PSSLDiffieHellman : public PObject
                    const BYTE * gData, PINDEX gSize,
                    const BYTE * kData, PINDEX kSize);
 
-    dh_st    * m_dh;
+    void    * m_dh;
+//    dh_st    * m_dh;
     PBYTEArray m_sessionKey;
 };
 
@@ -563,7 +564,7 @@ class PSSLCipherContext : public PObject
 
     /**Get internal OpenSSL cipher context structure.
       */
-    operator evp_cipher_ctx_st *() const { return m_context; }
+    operator void *() const { return m_context; }
 
     /// Indicate we are encrypting data
     bool IsEncrypt() const;
@@ -640,8 +641,9 @@ class PSSLCipherContext : public PObject
 
   protected:
     PadMode             m_padMode;
-    evp_cipher_ctx_st * m_context;
-
+    void * m_context;
+    bool        m_encrypt;
+  
   private:
     PSSLCipherContext(const PSSLCipherContext &) { }
     void operator=(const PSSLCipherContext &) { }
@@ -723,7 +725,8 @@ class PSSLContext : public PObject
 
     /**Get the internal SSL context structure.
       */
-    operator ssl_ctx_st *() const { return m_context; }
+    operator void *() const { return m_context; }
+//    operator ssl_ctx_st *() const { return m_context; }
 
     /**Set the locations for CA certificates used to verify peer certificates.
       */
@@ -813,7 +816,8 @@ class PSSLContext : public PObject
     void Construct(const void * sessionId, PINDEX idSize);
 
     Method       m_method;
-    ssl_ctx_st * m_context;
+    void * m_context;
+//    ssl_ctx_st * m_context;
     PSSLPasswordNotifier m_passwordNotifier;
 
   private:
@@ -958,7 +962,7 @@ class PSSLChannel : public PIndirectChannel
 
     /**Get the internal SSL context structure.
       */
-    operator ssl_st *() const { return m_ssl; }
+    operator void *() const { return m_ssl; }
 
 
   protected:
@@ -979,8 +983,8 @@ class PSSLChannel : public PIndirectChannel
 
     PSSLContext  * m_context;
     bool           m_autoDeleteContext;
-    ssl_st       * m_ssl;
-    bio_st       * m_bio;
+    void       * m_ssl;
+    void       * m_bio;
     VerifyNotifier m_verifyNotifier;
 
     P_REMOVE_VIRTUAL(PBoolean,RawSSLRead(void *, PINDEX &),false);

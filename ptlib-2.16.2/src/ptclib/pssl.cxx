@@ -83,12 +83,14 @@
 #pragma implementation "pssl.h"
 #endif
 
+#include <ptlib.h>
+
+#include <ptclib/pssl.h>
+#include <ptclib/mime.h>
 
 #if P_SSL
 
 #define USE_SOCKETS
-
-#include <ptclib/cypher.h>
 
 extern "C" {
 
@@ -103,11 +105,6 @@ extern "C" {
   #include <openssl/aes.h>
 #endif
 };
-
-#include <ptlib.h>
-
-#include <ptclib/pssl.h>
-#include <ptclib/mime.h>
 
 #if (OPENSSL_VERSION_NUMBER < 0x00906000)
   #error OpenSSL too old!
@@ -1028,25 +1025,28 @@ void PAESContext::Decrypt(const void * in, void * out)
 
 PSSLCipherContext::PSSLCipherContext(bool encrypt)
   : m_padMode(PadPKCS)
-//  , m_context(EVP_CIPHER_CTX_new())
-  , m_context(new EVP_CIPHER_CTX)
+  , m_context(EVP_CIPHER_CTX_new())
+//  , m_context(new EVP_CIPHER_CTX)
 {
-  EVP_CIPHER_CTX_init(m_context);
-  m_context->encrypt = encrypt;
-  EVP_CIPHER_CTX_set_padding(m_context, 1);
+  EVP_CIPHER_CTX_init((EVP_CIPHER_CTX*)m_context);
+//  m_context->encrypt = encrypt;
+  m_encrypt = encrypt;
+  EVP_CIPHER_CTX_set_padding((EVP_CIPHER_CTX*)m_context, 1);
 }
 
 
 PSSLCipherContext::~PSSLCipherContext()
 {
-  EVP_CIPHER_CTX_cleanup(m_context);
-  delete m_context;
+  EVP_CIPHER_CTX_cleanup((EVP_CIPHER_CTX*)m_context);
+//  delete m_context;
+  EVP_CIPHER_CTX_reset((EVP_CIPHER_CTX*)m_context);
+  EVP_CIPHER_CTX_free((EVP_CIPHER_CTX*)m_context);
 }
 
 
 PString PSSLCipherContext::GetAlgorithm() const
 {
-  const EVP_CIPHER * cipher = EVP_CIPHER_CTX_cipher(m_context);
+  const EVP_CIPHER * cipher = EVP_CIPHER_CTX_cipher((EVP_CIPHER_CTX*)m_context);
   if (cipher == NULL)
     return PString::Empty();
   return EVP_CIPHER_name(cipher);
@@ -1068,7 +1068,7 @@ bool PSSLCipherContext::SetAlgorithm(const PString & name)
     }
   }
 
-  if (EVP_CipherInit_ex(m_context, cipher, NULL, NULL, NULL, m_context->encrypt)) {
+  if (EVP_CipherInit_ex((EVP_CIPHER_CTX*)m_context, cipher, NULL, NULL, NULL, m_encrypt)) {
     PTRACE(4, "Set cipher algorithm \"" << GetAlgorithm() << "\" from \"" << name << '"');
     return true;
   }
@@ -1082,12 +1082,12 @@ bool PSSLCipherContext::SetKey(const BYTE * keyPtr, PINDEX keyLen)
 {
   PTRACE(4, "Setting key: " << hex << fixed << setfill('0') << PBYTEArray(keyPtr, keyLen, false));
 
-  if (keyLen < EVP_CIPHER_CTX_key_length(m_context)) {
+  if (keyLen < EVP_CIPHER_CTX_key_length((EVP_CIPHER_CTX*)m_context)) {
     PTRACE(2, "Incorrect key length for encryption");
     return false;
   }
 
-  if (EVP_CipherInit_ex(m_context, NULL, NULL, keyPtr, NULL, m_context->encrypt))
+  if (EVP_CipherInit_ex((EVP_CIPHER_CTX*)m_context, NULL, NULL, keyPtr, NULL, m_encrypt))
     return true;
 
   PTRACE(2, "Could not set key: " << PSSLError());
@@ -1098,18 +1098,18 @@ bool PSSLCipherContext::SetKey(const BYTE * keyPtr, PINDEX keyLen)
 bool PSSLCipherContext::SetPadding(PadMode pad)
 {
   m_padMode = pad;
-  return EVP_CIPHER_CTX_set_padding(m_context, pad != NoPadding) != 0;
+  return EVP_CIPHER_CTX_set_padding((EVP_CIPHER_CTX*)m_context, pad != NoPadding) != 0;
 }
 
 
 bool PSSLCipherContext::SetIV(const BYTE * ivPtr, PINDEX ivLen)
 {
-  if (ivLen < EVP_CIPHER_CTX_iv_length(m_context)) {
+  if (ivLen < EVP_CIPHER_CTX_iv_length((EVP_CIPHER_CTX*)m_context)) {
     PTRACE(2, "Incorrect inital vector length for encryption");
     return false;
   }
 
-  if (EVP_CipherInit_ex(m_context, NULL, NULL, NULL, ivPtr, m_context->encrypt))
+  if (EVP_CipherInit_ex((EVP_CIPHER_CTX*)m_context, NULL, NULL, NULL, ivPtr, m_encrypt))
     return true;
 
   PTRACE(2, "Could not set initial vector: " << PSSLError());
@@ -1133,7 +1133,7 @@ bool PSSLCipherContext::Process(const PBYTEArray & in, PBYTEArray & out)
 // ciphertext stealing code based on a OpenSSL patch by An-Cheng Huang
 // Note: This ciphertext stealing implementation doesn't seem to always produce
 // compatible results, avoid when encrypting:
-
+/*
 static int EVP_CipherUpdate_cts(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl,
                       const unsigned char *in, int inl)
 {
@@ -1145,7 +1145,7 @@ static int EVP_CipherUpdate_cts(EVP_CIPHER_CTX *ctx, unsigned char *out, int *ou
     if ((ctx->buf_len + inl) <= bl) {
         /* new plaintext is no more than 1 block */
         /* copy the in data into the buffer and return */
-        memcpy(&(ctx->buf[ctx->buf_len]), in, inl);
+/*        memcpy(&(ctx->buf[ctx->buf_len]), in, inl);
         ctx->buf_len += inl;
         *outl = 0;
         return 1;
@@ -1153,7 +1153,7 @@ static int EVP_CipherUpdate_cts(EVP_CIPHER_CTX *ctx, unsigned char *out, int *ou
 
     /* more than 1 block of new plaintext available */
     /* encrypt the previous plaintext, if any */
-    if (ctx->final_used) {
+/*    if (ctx->final_used) {
         if (!(ctx->cipher->do_cipher(ctx, out, ctx->final, bl))) {
           return 0;
         }
@@ -1163,7 +1163,7 @@ static int EVP_CipherUpdate_cts(EVP_CIPHER_CTX *ctx, unsigned char *out, int *ou
     }
 
     /* we already know ctx->buf_len + inl must be > bl */
-    memcpy(&(ctx->buf[ctx->buf_len]), in, (bl - ctx->buf_len));
+/*    memcpy(&(ctx->buf[ctx->buf_len]), in, (bl - ctx->buf_len));
     in += (bl - ctx->buf_len);
     inl -= (bl - ctx->buf_len);
     ctx->buf_len = bl;
@@ -1221,19 +1221,19 @@ static int EVP_EncryptFinal_cts(EVP_CIPHER_CTX *ctx, unsigned char *out, int *ou
     }
 
     /* handle leftover bytes */
-    leftover = ctx->buf_len;
+/*    leftover = ctx->buf_len;
 
     switch (EVP_CIPHER_CTX_mode(ctx)) {
         case EVP_CIPH_ECB_MODE: {
             /* encrypt => C_{n} plus C' */
-            if (!(ctx->cipher->do_cipher(ctx, tmp, ctx->final, bl))) {
+/*            if (!(ctx->cipher->do_cipher(ctx, tmp, ctx->final, bl))) {
                  return 0;
             }
 
             /* P_n plus C' */
-            memcpy(&(ctx->buf[leftover]), &(tmp[leftover]), (bl - leftover));
+/*            memcpy(&(ctx->buf[leftover]), &(tmp[leftover]), (bl - leftover));
             /* encrypt => C_{n-1} */
-            if (!(ctx->cipher->do_cipher(ctx, out, ctx->buf, bl))) {
+/*            if (!(ctx->cipher->do_cipher(ctx, out, ctx->buf, bl))) {
                 return 0;
             }
 
@@ -1243,18 +1243,18 @@ static int EVP_EncryptFinal_cts(EVP_CIPHER_CTX *ctx, unsigned char *out, int *ou
         }
         case EVP_CIPH_CBC_MODE: {
             /* encrypt => C_{n} plus C' */
-            if (!(ctx->cipher->do_cipher(ctx, tmp, ctx->final, bl))) {
+/*            if (!(ctx->cipher->do_cipher(ctx, tmp, ctx->final, bl))) {
                 return 0;
             }
 
             /* P_n plus 0s */
-            memset(&(ctx->buf[leftover]), 0, (bl - leftover));
+/*            memset(&(ctx->buf[leftover]), 0, (bl - leftover));
 
             /* note that in cbc encryption, plaintext will be xor'ed with the previous
              * ciphertext, which is what we want.
              */
             /* encrypt => C_{n-1} */
-            if (!(ctx->cipher->do_cipher(ctx, out, ctx->buf, bl))) {
+/*            if (!(ctx->cipher->do_cipher(ctx, out, ctx->buf, bl))) {
                 return 0;
             }
 
@@ -1285,19 +1285,19 @@ static int EVP_DecryptFinal_cts(EVP_CIPHER_CTX *ctx, unsigned char *out, int *ou
     }
 
     /* handle leftover bytes */
-    leftover = ctx->buf_len;
+/*    leftover = ctx->buf_len;
 
     switch (EVP_CIPHER_CTX_mode(ctx)) {
         case EVP_CIPH_ECB_MODE: {
             /* decrypt => P_n plus C' */
-            if (!(ctx->cipher->do_cipher(ctx, tmp, ctx->final, bl))) {
+/*            if (!(ctx->cipher->do_cipher(ctx, tmp, ctx->final, bl))) {
                 return 0;
             }
 
             /* C_n plus C' */
-            memcpy(&(ctx->buf[leftover]), &(tmp[leftover]), (bl - leftover));
+/*            memcpy(&(ctx->buf[leftover]), &(tmp[leftover]), (bl - leftover));
             /* decrypt => P_{n-1} */
-            if (!(ctx->cipher->do_cipher(ctx, out, ctx->buf, bl))) {
+/*            if (!(ctx->cipher->do_cipher(ctx, out, ctx->buf, bl))) {
                 return 0;
             }
 
@@ -1312,34 +1312,34 @@ static int EVP_DecryptFinal_cts(EVP_CIPHER_CTX *ctx, unsigned char *out, int *ou
             memcpy(C_n_minus_2, ctx->iv, bl);
 
             /* C_n plus 0s in ctx->buf */
-            memset(&(ctx->buf[leftover]), 0, (bl - leftover));
+/*            memset(&(ctx->buf[leftover]), 0, (bl - leftover));
 
             /* ctx->final is C_{n-1} */
             /* decrypt => (P_n plus C')'' */
-            if (!(ctx->cipher->do_cipher(ctx, tmp, ctx->final, bl))) {
+/*            if (!(ctx->cipher->do_cipher(ctx, tmp, ctx->final, bl))) {
                 return 0;
             }
             /* XOR'ed with C_{n-2} => (P_n plus C')' */
-            for (i = 0; i < bl; i++) {
+/*            for (i = 0; i < bl; i++) {
                 tmp[i] = tmp[i] ^ C_n_minus_2[i];
             }
             /* XOR'ed with (C_n plus 0s) => P_n plus C' */
-            for (i = 0; i < bl; i++) {
+/*            for (i = 0; i < bl; i++) {
                 tmp[i] = tmp[i] ^ ctx->buf[i];
             }
 
             /* C_n plus C' in ctx->buf */
-            memcpy(&(ctx->buf[leftover]), &(tmp[leftover]), (bl - leftover));
+/*            memcpy(&(ctx->buf[leftover]), &(tmp[leftover]), (bl - leftover));
             /* decrypt => P_{n-1}'' */
-            if (!(ctx->cipher->do_cipher(ctx, out, ctx->buf, bl))) {
+/*            if (!(ctx->cipher->do_cipher(ctx, out, ctx->buf, bl))) {
                 return 0;
             }
             /* XOR'ed with C_{n-1} => P_{n-1}' */
-            for (i = 0; i < bl; i++) {
+/*            for (i = 0; i < bl; i++) {
                 out[i] = out[i] ^ ctx->final[i];
             }
             /* XOR'ed with C_{n-2} => P_{n-1} */
-            for (i = 0; i < bl; i++) {
+/*            for (i = 0; i < bl; i++) {
                 out[i] = out[i] ^ C_n_minus_2[i];
             }
 
@@ -1352,20 +1352,21 @@ static int EVP_DecryptFinal_cts(EVP_CIPHER_CTX *ctx, unsigned char *out, int *ou
             return 0;
     }
 }
-
+*/
 
 bool PSSLCipherContext::Process(const BYTE * inPtr, PINDEX inLen, BYTE * outPtr, PINDEX & outLen, bool partial)
 {
-  if (outLen < (m_context->encrypt ? GetBlockedDataSize(inLen) : inLen))
+  if (outLen < (m_encrypt ? GetBlockedDataSize(inLen) : inLen))
     return false;
 
   int len = -1;
   if (m_padMode == PadCipherStealing) {
-    if (!EVP_CipherUpdate_cts(m_context, outPtr, &len, inPtr, inLen))
+    if (!EVP_CipherUpdate((EVP_CIPHER_CTX*)m_context, outPtr, &len, inPtr, inLen))
+//    if (!EVP_CipherUpdate_cts(m_context, outPtr, &len, inPtr, inLen))
       return false;
   }
   else {
-    if (!EVP_CipherUpdate(m_context, outPtr, &len, inPtr, inLen)) {
+    if (!EVP_CipherUpdate((EVP_CIPHER_CTX*)m_context, outPtr, &len, inPtr, inLen)) {
       PTRACE(2, "Could not update data: " << PSSLError());
       return false;
     }
@@ -1386,7 +1387,7 @@ bool PSSLCipherContext::Process(const BYTE * inPtr, PINDEX inLen, BYTE * outPtr,
       break;
 
     case PadPKCS :
-      if (!EVP_CipherFinal(m_context, outPtr+len, &len)) {
+      if (!EVP_CipherFinal((EVP_CIPHER_CTX*)m_context, outPtr+len, &len)) {
         PTRACE(2, "Could not finalise data: " << PSSLError());
         return false;
       }
@@ -1394,6 +1395,7 @@ bool PSSLCipherContext::Process(const BYTE * inPtr, PINDEX inLen, BYTE * outPtr,
 
     // Polycom endpoints (eg. m100 and PVX) don't fill the pading properly, so we have to disable some checks
     case PadLoosePKCS :
+/*
       if (m_context->buf_len != 0 || m_context->final_used == 0) {
         PTRACE(2, "Decrypt error: wrong final block length:"
                        " buf_len=" << m_context->buf_len <<
@@ -1411,11 +1413,14 @@ bool PSSLCipherContext::Process(const BYTE * inPtr, PINDEX inLen, BYTE * outPtr,
         for (n = 0; n < len; n++)
           outPtr[outLen+n] = m_context->final[n];
       }
+*/
       break;
 
     case PadCipherStealing :
-      if (!(m_context->encrypt ? EVP_EncryptFinal_cts(m_context, outPtr+len, &len)
-                               : EVP_DecryptFinal_cts(m_context, outPtr+len, &len)))
+//      if (!(m_context->encrypt ? EVP_EncryptFinal_cts(m_context, outPtr+len, &len)
+//                               : EVP_DecryptFinal_cts(m_context, outPtr+len, &len)))
+      if (!(m_encrypt ? EVP_EncryptFinal((EVP_CIPHER_CTX*)m_context, outPtr+len, &len)
+                               : EVP_DecryptFinal((EVP_CIPHER_CTX*)m_context, outPtr+len, &len)))
         return false;
       break;
   }
@@ -1427,31 +1432,31 @@ bool PSSLCipherContext::Process(const BYTE * inPtr, PINDEX inLen, BYTE * outPtr,
 
 bool PSSLCipherContext::IsEncrypt() const
 {
-  return m_context->encrypt != 0;
+  return m_encrypt != 0;
 }
 
 
 PINDEX PSSLCipherContext::GetKeyLength() const
 {
-  return EVP_CIPHER_CTX_key_length(m_context);
+  return EVP_CIPHER_CTX_key_length((EVP_CIPHER_CTX*)m_context);
 }
 
 
 PINDEX PSSLCipherContext::GetIVLength() const
 {
-  return EVP_CIPHER_CTX_iv_length(m_context);
+  return EVP_CIPHER_CTX_iv_length((EVP_CIPHER_CTX*)m_context);
 }
 
 
 PINDEX PSSLCipherContext::GetBlockSize() const
 {
-  return EVP_CIPHER_CTX_block_size(m_context);
+  return EVP_CIPHER_CTX_block_size((EVP_CIPHER_CTX*)m_context);
 }
 
 
 PINDEX PSSLCipherContext::GetBlockedDataSize(PINDEX size) const
 {
-  PINDEX blockSize = EVP_CIPHER_CTX_block_size(m_context);
+  PINDEX blockSize = EVP_CIPHER_CTX_block_size((EVP_CIPHER_CTX*)m_context);
   return ((size+blockSize-1)/blockSize)*blockSize;
 }
 
@@ -1514,7 +1519,7 @@ PSSLDiffieHellman::PSSLDiffieHellman(PINDEX numBits, const BYTE * pData, const B
   if (Construct(pData, numBytes, gData, numBytes, pubKey, numBytes))
     return;
 
-  DH_free(m_dh);
+  DH_free((DH *)m_dh);
   m_dh = NULL;
 }
 
@@ -1530,7 +1535,7 @@ PSSLDiffieHellman::PSSLDiffieHellman(const PBYTEArray & pData,
   if (Construct(pData, pData.GetSize(), gData, gData.GetSize(), pubKey, pubKey.GetSize()))
     return;
 
-  DH_free(m_dh);
+  DH_free((DH *)m_dh);
   m_dh = NULL;
 }
 
@@ -1542,14 +1547,18 @@ bool PSSLDiffieHellman::Construct(const BYTE * pData, PINDEX pSize,
   if (!PAssert(pSize >= 64 && pSize%4 == 0 && gSize <= pSize && kSize <= pSize, PInvalidParameter))
     return false;
 
-  if ((m_dh->p = BN_bin2bn(pData, pSize, NULL)) == NULL)
+  BIGNUM *p = NULL;
+  if ((p = BN_bin2bn(pData, pSize, NULL)) == NULL)
     return false;
 
-  if ((m_dh->g = BN_bin2bn(gData, gSize, NULL)) == NULL)
+  BIGNUM *g = NULL;
+  if ((g = BN_bin2bn(gData, gSize, NULL)) == NULL)
     return false;
+
+  DH_set0_pqg((DH *)m_dh, p, NULL, g);
 
   int err = -1;
-  if (DH_check(m_dh, &err)) {
+  if (DH_check((DH *)m_dh, &err)) {
     switch (err) {
       case DH_CHECK_P_NOT_PRIME:
         PTRACE(2, "The p value is not prime");
@@ -1570,7 +1579,7 @@ bool PSSLDiffieHellman::Construct(const BYTE * pData, PINDEX pSize,
   }
 
   if (kData == NULL) {
-    if (DH_generate_key(m_dh))
+    if (DH_generate_key((DH *)m_dh))
       return true;
 
     PSSLAssert("DH key generate failed: ");
@@ -1580,11 +1589,13 @@ bool PSSLDiffieHellman::Construct(const BYTE * pData, PINDEX pSize,
   if (!PAssert(kSize <= pSize && kSize%4 == 0, PInvalidParameter))
     return false;
 
-  if ((m_dh->pub_key = BN_bin2bn(kData, kSize, NULL)) != NULL)
-    return true;
+  BIGNUM *pub_key;
+  if ((pub_key = BN_bin2bn(kData, kSize, NULL)) == NULL)
+    return false;
 
+  DH_set0_key((DH *)m_dh, pub_key, NULL);
   PSSLAssert("DH public key invalid: ");
-  return false;
+  return true;
 }
 
 
@@ -1597,7 +1608,7 @@ PSSLDiffieHellman::PSSLDiffieHellman(const PSSLDiffieHellman & diffie)
 PSSLDiffieHellman & PSSLDiffieHellman::operator=(const PSSLDiffieHellman & diffie)
 {
   if (m_dh != NULL)
-    DH_free(m_dh);
+    DH_free((DH *)m_dh);
   m_dh = diffie.m_dh;
   return *this;
 }
@@ -1606,7 +1617,7 @@ PSSLDiffieHellman & PSSLDiffieHellman::operator=(const PSSLDiffieHellman & diffi
 PSSLDiffieHellman::~PSSLDiffieHellman()
 {
   if (m_dh != NULL)
-    DH_free(m_dh);
+    DH_free((DH *)m_dh);
 }
 
 #ifdef P_d2i_DHparams_bio_OLD
@@ -1627,7 +1638,7 @@ PSSLDiffieHellman::~PSSLDiffieHellman()
 PBoolean PSSLDiffieHellman::Load(const PFilePath & dhFile, PSSLFileTypes fileType)
 {
   if (m_dh != NULL) {
-    DH_free(m_dh);
+    DH_free((DH *)m_dh);
     m_dh = NULL;
   }
 
@@ -1674,9 +1685,8 @@ PBoolean PSSLDiffieHellman::Load(const PFilePath & dhFile, PSSLFileTypes fileTyp
 
 PINDEX PSSLDiffieHellman::GetNumBits() const
 {
-  return m_dh != NULL ? BN_num_bits(m_dh->p) : 0;
+  return m_dh != NULL ? BN_num_bits(DH_get0_p((const DH *)m_dh)) : 0;
 }
-
 
 static PBYTEArray GetBigNum(BIGNUM * bn, PINDEX numBits)
 {
@@ -1696,19 +1706,19 @@ static PBYTEArray GetBigNum(BIGNUM * bn, PINDEX numBits)
 
 PBYTEArray PSSLDiffieHellman::GetModulus() const
 {
-  return GetBigNum(m_dh != NULL ? m_dh->p : NULL, GetNumBits());
+  return GetBigNum(m_dh != NULL ? (BIGNUM*)DH_get0_p((const DH *)m_dh) : NULL, GetNumBits());
 }
 
 
 PBYTEArray PSSLDiffieHellman::GetGenerator() const
 {
-  return GetBigNum(m_dh != NULL ? m_dh->g : NULL, GetNumBits());
+  return GetBigNum(m_dh != NULL ? (BIGNUM*)DH_get0_g((const DH *)m_dh) : NULL, GetNumBits());
 }
 
 
 PBYTEArray PSSLDiffieHellman::GetHalfKey() const
 {
-  return GetBigNum(m_dh != NULL ? m_dh->pub_key : NULL, GetNumBits());
+  return GetBigNum(m_dh != NULL ? (BIGNUM*)DH_get0_pub_key((const DH *)m_dh) : NULL, GetNumBits());
 }
 
 
@@ -1718,7 +1728,7 @@ bool PSSLDiffieHellman::ComputeSessionKey(const PBYTEArray & otherHalf)
     return false;
 
   BIGNUM * obn = BN_bin2bn(otherHalf, otherHalf.GetSize(), NULL);
-  int result = DH_compute_key(m_sessionKey.GetPointer(DH_size(m_dh)), obn, m_dh);
+  int result = DH_compute_key(m_sessionKey.GetPointer(DH_size((DH*)m_dh)), obn, (DH*)m_dh);
   if (result > 0)
     m_sessionKey.SetSize(result);
   else {
@@ -1857,7 +1867,6 @@ PSSLContext::PSSLContext(Method method, const void * sessionId, PINDEX idSize)
   Construct(sessionId, idSize);
 }
 
-
 PSSLContext::PSSLContext(const void * sessionId, PINDEX idSize)
   : m_method(HighestTLS)
 {
@@ -1926,23 +1935,23 @@ void PSSLContext::Construct(const void * sessionId, PINDEX idSize)
   if (sessionId != NULL) {
     if (idSize == 0)
       idSize = ::strlen((const char *)sessionId)+1;
-    SSL_CTX_set_session_id_context(m_context, (const BYTE *)sessionId, idSize);
-    SSL_CTX_sess_set_cache_size(m_context, 128);
+    SSL_CTX_set_session_id_context((SSL_CTX*)m_context, (const BYTE *)sessionId, idSize);
+    SSL_CTX_sess_set_cache_size((SSL_CTX*)m_context, 128);
   }
 
-  SSL_CTX_set_info_callback(m_context, InfoCallback);
+  SSL_CTX_set_info_callback((SSL_CTX*)m_context, InfoCallback);
   SetVerifyMode(VerifyNone);
 
   /* Specify an ECDH group for ECDHE ciphers, otherwise they cannot be
      negotiated when acting as the server. Use NIST's P-256 which is commonly
      supported. */
 #if OPENSSL_VERSION_NUMBER >= 0x10002000L
-  SSL_CTX_set_ecdh_auto(m_context, 1);
+  SSL_CTX_set_ecdh_auto((SSL_CTX*)m_context, 1);
 #else
   EC_KEY* ecdh = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
   if (ecdh != NULL) {
-    SSL_CTX_set_options(m_context, SSL_OP_SINGLE_ECDH_USE);
-    SSL_CTX_set_tmp_ecdh(m_context, ecdh);
+    SSL_CTX_set_options((SSL_CTX*)m_context, SSL_OP_SINGLE_ECDH_USE);
+    SSL_CTX_set_tmp_ecdh((SSL_CTX*)m_context, ecdh);
     EC_KEY_free(ecdh);
   }
 #endif
@@ -1955,7 +1964,7 @@ PSSLContext::~PSSLContext()
 {
   PTRACE(4, "Destroyed context: method=" << m_method << " ctx=" << m_context);
   if (m_context != NULL)
-    SSL_CTX_free(m_context);
+    SSL_CTX_free((SSL_CTX*)m_context);
 }
 
 
@@ -1965,23 +1974,23 @@ bool PSSLContext::SetVerifyLocations(const PFilePath & caFile, const PDirectory 
     return false;
 
   PString caPath = caDir.Left(caDir.GetLength()-1);
-  if (SSL_CTX_load_verify_locations(m_context, caFile.IsEmpty() ? NULL : (const char *)caFile,
+  if (SSL_CTX_load_verify_locations((SSL_CTX*)m_context, caFile.IsEmpty() ? NULL : (const char *)caFile,
                                                caPath.IsEmpty() ? NULL : (const char *)caPath)) {
     PTRACE(4, "Set context " << m_context << " verify locations file=\"" << caFile << "\", dir=\"" << caDir << '"');
     return true;
   }
 
   PTRACE(2, "Could not set context " << m_context << " verify locations file=\"" << caFile << "\", dir=\"" << caDir << '"');
-  return SSL_CTX_set_default_verify_paths(m_context);
+  return SSL_CTX_set_default_verify_paths((SSL_CTX*)m_context);
 }
 
 
 bool PSSLContext::SetVerifyCertificate(const PSSLCertificate & cert)
 {
-  if (PAssertNULL(m_context) == NULL || !cert.IsValid())
+  if (PAssertNULL((SSL_CTX*)m_context) == NULL || !cert.IsValid())
     return false;
 
-  X509_STORE * store = SSL_CTX_get_cert_store(m_context);
+  X509_STORE * store = SSL_CTX_get_cert_store((SSL_CTX*)m_context);
   if (store == NULL)
     return false;
 
@@ -1998,20 +2007,20 @@ static int VerifyModeBits[PSSLContext::EndVerifyMode] = {
 
 void PSSLContext::SetVerifyMode(VerifyMode mode, unsigned depth)
 {
-  if (PAssertNULL(m_context) == NULL)
+  if (PAssertNULL((SSL_CTX*)m_context) == NULL)
     return;
 
-  SSL_CTX_set_verify(m_context, VerifyModeBits[mode], VerifyCallback);
-  SSL_CTX_set_verify_depth(m_context, depth);
+  SSL_CTX_set_verify((SSL_CTX*)m_context, VerifyModeBits[mode], VerifyCallback);
+  SSL_CTX_set_verify_depth((SSL_CTX*)m_context, depth);
 }
 
 
 PSSLContext::VerifyMode PSSLContext::GetVerifyMode() const
 {
-  if (PAssertNULL(m_context) == NULL)
+  if (PAssertNULL((SSL_CTX*)m_context) == NULL)
     return VerifyNone;
 
-  int v = SSL_CTX_get_verify_mode(m_context);
+  int v = SSL_CTX_get_verify_mode((SSL_CTX*)m_context);
   if (v == SSL_VERIFY_NONE)
     return VerifyNone;
   if ((v&SSL_VERIFY_FAIL_IF_NO_PEER_CERT) == 0)
@@ -2022,19 +2031,19 @@ PSSLContext::VerifyMode PSSLContext::GetVerifyMode() const
 
 bool PSSLContext::AddClientCA(const PSSLCertificate & certificate)
 {
-  return PAssertNULL(m_context) != NULL &&
+  return PAssertNULL((SSL_CTX*)m_context) != NULL &&
          certificate.IsValid() &&
-         SSL_CTX_add_client_CA(m_context, certificate);
+         SSL_CTX_add_client_CA((SSL_CTX*)m_context, certificate);
 }
 
 
 bool PSSLContext::AddClientCA(const PList<PSSLCertificate> & certificates)
 {
-  if (PAssertNULL(m_context) == NULL)
+  if (PAssertNULL((SSL_CTX*)m_context) == NULL)
     return false;
 
   for (PList<PSSLCertificate>::const_iterator it = certificates.begin(); it != certificates.end(); ++it) {
-    if (!it->IsValid() || !SSL_CTX_add_client_CA(m_context, *it))
+    if (!it->IsValid() || !SSL_CTX_add_client_CA((SSL_CTX*)m_context, *it))
       return false;
   }
 
@@ -2044,33 +2053,33 @@ bool PSSLContext::AddClientCA(const PList<PSSLCertificate> & certificates)
 
 bool PSSLContext::UseCertificate(const PSSLCertificate & certificate)
 {
-  return PAssertNULL(m_context) != NULL &&
+  return PAssertNULL((SSL_CTX*)m_context) != NULL &&
          certificate.IsValid() &&
-         SSL_CTX_use_certificate(m_context, certificate) > 0;
+         SSL_CTX_use_certificate((SSL_CTX*)m_context, certificate) > 0;
 }
 
 
 bool PSSLContext::UsePrivateKey(const PSSLPrivateKey & key)
 {
-  return PAssertNULL(m_context) != NULL &&
-         SSL_CTX_use_PrivateKey(m_context, key) > 0 &&
-         SSL_CTX_check_private_key(m_context);
+  return PAssertNULL((SSL_CTX*)m_context) != NULL &&
+         SSL_CTX_use_PrivateKey((SSL_CTX*)m_context, key) > 0 &&
+         SSL_CTX_check_private_key((SSL_CTX*)m_context);
 }
 
 
 bool PSSLContext::UseDiffieHellman(const PSSLDiffieHellman & dh)
 {
-  return PAssertNULL(m_context) != NULL &&
+  return PAssertNULL((SSL_CTX*)m_context) != NULL &&
          dh.IsValid() &&
-         SSL_CTX_set_tmp_dh(m_context, (dh_st *)dh) > 0;
+         SSL_CTX_set_tmp_dh((SSL_CTX*)m_context, (void *)dh) > 0;
 }
 
 
 bool PSSLContext::SetCipherList(const PString & ciphers)
 {
-  return PAssertNULL(m_context) != NULL &&
+  return PAssertNULL((SSL_CTX*)m_context) != NULL &&
          !ciphers.IsEmpty() &&
-         SSL_CTX_set_cipher_list(m_context, (char *)(const char *)ciphers);
+         SSL_CTX_set_cipher_list((SSL_CTX*)m_context, (char *)(const char *)ciphers);
 }
 
 
@@ -2079,7 +2088,7 @@ bool PSSLContext::SetCredentials(const PString & authority,
                                  const PString & privateKey,
                                  bool create)
 {
-  if (PAssertNULL(m_context) == NULL)
+  if (PAssertNULL((SSL_CTX*)m_context) == NULL)
     return false;
 
   if (!authority.IsEmpty()) {
@@ -2173,15 +2182,15 @@ bool PSSLContext::SetCredentials(const PString & authority,
 
 void PSSLContext::SetPasswordNotifier(const PSSLPasswordNotifier & notifier)
 {
-  if (PAssertNULL(m_context) == NULL)
+  if (PAssertNULL((SSL_CTX*)m_context) == NULL)
     return;
 
   m_passwordNotifier = notifier;
   if (notifier.IsNULL())
-    SSL_CTX_set_default_passwd_cb(m_context, NULL);
+    SSL_CTX_set_default_passwd_cb((SSL_CTX*)m_context, NULL);
   else {
-    SSL_CTX_set_default_passwd_cb(m_context, PasswordCallback);
-    SSL_CTX_set_default_passwd_cb_userdata(m_context, &m_passwordNotifier);
+    SSL_CTX_set_default_passwd_cb((SSL_CTX*)m_context, PasswordCallback);
+    SSL_CTX_set_default_passwd_cb_userdata((SSL_CTX*)m_context, &m_passwordNotifier);
   }
 }
 
@@ -2189,9 +2198,9 @@ void PSSLContext::SetPasswordNotifier(const PSSLPasswordNotifier & notifier)
 bool PSSLContext::SetExtension(const char * extension)
 {
 #if P_SSL_SRTP
-  return PAssertNULL(m_context) != NULL &&
+  return PAssertNULL((SSL_CTX*)m_context) != NULL &&
          extension != NULL && *extension != '\0' &&
-         SSL_CTX_set_tlsext_use_srtp(m_context, extension) == 0;
+         SSL_CTX_set_tlsext_use_srtp((SSL_CTX*)m_context, extension) == 0;
 #else
   return false;
 #endif
@@ -2223,14 +2232,14 @@ void PSSLChannel::Construct(PSSLContext * ctx, PBoolean autoDel)
   m_context = ctx;
   m_autoDeleteContext = autoDel;
 
-  m_ssl = SSL_new(*m_context);
+  m_ssl = SSL_new((SSL_CTX*)(void*)*m_context);
   if (m_ssl == NULL) {
     PSSLAssert("Error creating channel: ");
     return;
   }
 
-  SSL_set_app_data(m_ssl, this);
-
+  SSL_set_app_data((SSL*)m_ssl, this);
+/*
   static BIO_METHOD BioMethods =
   {
     BIO_TYPE_SOCKET,
@@ -2244,17 +2253,30 @@ void PSSLChannel::Construct(PSSLContext * ctx, PBoolean autoDel)
     BioClose,
     NULL
   };
-
   m_bio = BIO_new(&BioMethods);
+*/
+
+  BIO_METHOD *BioMethods = BIO_meth_new(BIO_TYPE_SOCKET, "PTLib-PSSLChannel");
+  BIO_meth_set_write(BioMethods, BioWrite);
+  BIO_meth_set_read(BioMethods, BioRead);
+  BIO_meth_set_ctrl(BioMethods, BioControl);
+  BIO_meth_set_destroy(BioMethods, BioClose);
+  
+  m_bio = BIO_new(BioMethods);
   if (m_bio == NULL) {
     PSSLAssert("Error creating BIO: ");
+  
+    BIO_meth_free(BioMethods);
     return;
   }
+  BIO_meth_free(BioMethods);
 
-  m_bio->ptr = this;
-  m_bio->init = 1;
+  BIO_set_data((BIO*)m_bio, this);
+  BIO_set_init((BIO*)m_bio, 1);
+//  m_bio->ptr = this;
+//  m_bio->init = 1;
 
-  SSL_set_bio(m_ssl, m_bio, m_bio);
+  SSL_set_bio((SSL*)m_ssl, (BIO*)m_bio, (BIO*)m_bio);
 
   PTRACE(4, "Constructed channel: ssl=" << m_ssl << " method=" << m_context->GetMethod() << " context=" << &*m_context);
 }
@@ -2266,7 +2288,7 @@ PSSLChannel::~PSSLChannel()
 
   // free the SSL connection
   if (m_ssl != NULL)
-    SSL_free(m_ssl);
+    SSL_free((SSL*)m_ssl);
 
   // The above free of SSL also frees the m_bio, no need to it here
 
@@ -2287,12 +2309,12 @@ PBoolean PSSLChannel::Read(void * buf, PINDEX len)
   PBoolean returnValue = false;
   if (readChannel == NULL)
     SetErrorValues(NotOpen, EBADF, LastReadError);
-  else if (readTimeout == 0 && SSL_pending(m_ssl) == 0)
+  else if (readTimeout == 0 && SSL_pending((SSL*)m_ssl) == 0)
     SetErrorValues(Timeout, ETIMEDOUT, LastReadError);
   else {
     readChannel->SetReadTimeout(readTimeout);
 
-    int readResult = SSL_read(m_ssl, (char *)buf, len);
+    int readResult = SSL_read((SSL*)m_ssl, (char *)buf, len);
     lastReadCount = readResult;
     returnValue = readResult > 0;
     if (readResult < 0 && GetErrorCode(LastReadError) == NoError)
@@ -2307,20 +2329,20 @@ PBoolean PSSLChannel::Read(void * buf, PINDEX len)
 
 int PSSLChannel::BioRead(bio_st * bio, char * buf, int len)
 {
-  return bio != NULL && bio->ptr != NULL ? reinterpret_cast<PSSLChannel *>(bio->ptr)->BioRead(buf, len) : -1;
+  return bio != NULL && BIO_get_data(bio) != NULL ? reinterpret_cast<PSSLChannel *>(BIO_get_data(bio))->BioRead(buf, len) : -1;
 }
 
 
 int PSSLChannel::BioRead(char * buf, int len)
 {
-  BIO_clear_retry_flags(m_bio);
+  BIO_clear_retry_flags((BIO*)m_bio);
 
   // Skip over the polymorphic read, want to do real one
   if (PIndirectChannel::Read(buf, len))
     return GetLastReadCount();
 
   if (GetErrorCode(PChannel::LastReadError) == PChannel::Interrupted)
-    BIO_set_retry_read(m_bio);
+    BIO_set_retry_read((BIO*)m_bio);
 
   return -1;
 }
@@ -2345,7 +2367,7 @@ PBoolean PSSLChannel::Write(const void * buf, PINDEX len)
   else {
     writeChannel->SetWriteTimeout(writeTimeout);
 
-    int writeResult = SSL_write(m_ssl, (const char *)buf, len);
+    int writeResult = SSL_write((SSL*)m_ssl, (const char *)buf, len);
     lastWriteCount = writeResult;
     returnValue = lastWriteCount >= len;
     if (writeResult < 0 && GetErrorCode(LastWriteError) == NoError)
@@ -2360,20 +2382,20 @@ PBoolean PSSLChannel::Write(const void * buf, PINDEX len)
 
 int PSSLChannel::BioWrite(bio_st * bio, const char * buf, int len)
 {
-  return bio != NULL && bio->ptr != NULL ? reinterpret_cast<PSSLChannel *>(bio->ptr)->BioWrite(buf, len) : -1;
+  return bio != NULL && BIO_get_data(bio) != NULL ? reinterpret_cast<PSSLChannel *>(BIO_get_data(bio))->BioWrite(buf, len) : -1;
 }
 
 
 int PSSLChannel::BioWrite(const char * buf, int len)
 {
-  BIO_clear_retry_flags(m_bio);
+  BIO_clear_retry_flags((BIO*)m_bio);
 
   // Skip over the polymorphic write, want to do real one
   if (PIndirectChannel::Write(buf, len))
     return GetLastWriteCount();
 
   if (GetErrorCode(PChannel::LastWriteError) == PChannel::Interrupted)
-    BIO_set_retry_write(m_bio);
+    BIO_set_retry_write((BIO*)m_bio);
 
   return -1;
 }
@@ -2381,26 +2403,27 @@ int PSSLChannel::BioWrite(const char * buf, int len)
 
 PBoolean PSSLChannel::Close()
 {
-  bool ok = PAssertNULL(m_ssl) != NULL && SSL_shutdown(m_ssl);
+  bool ok = PAssertNULL(m_ssl) != NULL && SSL_shutdown((SSL*)m_ssl);
   return PIndirectChannel::Close() && ok;
 }
 
 
 int PSSLChannel::BioClose(bio_st * bio)
 {
-  return bio != NULL && bio->ptr != NULL ? reinterpret_cast<PSSLChannel *>(bio->ptr)->BioClose() : 0;
+  return bio != NULL && BIO_get_data(bio) != NULL ? reinterpret_cast<PSSLChannel *>(BIO_get_data(bio))->BioClose() : 0;
 }
 
 
 int PSSLChannel::BioClose()
 {
-  if (m_bio->shutdown) {
-    if (m_bio->init) {
+  if (BIO_get_shutdown((BIO*)m_bio)) {
+    if (BIO_get_init((BIO*)m_bio)) {
       Shutdown(PSocket::ShutdownReadAndWrite);
       PIndirectChannel::Close(); // Don't do PSSLChannel::Close() as OpenSSL might die
     }
-    m_bio->init  = 0;
-    m_bio->flags = 0;
+    BIO_set_init((BIO*)m_bio, 0);
+//    m_bio->init  = 0;
+//    m_bio->flags = 0;
   }
 
   return 1;
@@ -2411,7 +2434,7 @@ PBoolean PSSLChannel::ConvertOSError(P_INT_PTR libcReturnValue, ErrorGroup group
 {
   Errors lastError = NoError;
   DWORD osError = 0;
-  if (m_ssl != NULL && SSL_get_error(m_ssl, (int)libcReturnValue) != SSL_ERROR_NONE && (osError = ERR_peek_error()) != 0) {
+  if (m_ssl != NULL && SSL_get_error((SSL*)m_ssl, (int)libcReturnValue) != SSL_ERROR_NONE && (osError = ERR_peek_error()) != 0) {
     osError |= 0x80000000;
     lastError = AccessDenied;
   }
@@ -2449,7 +2472,7 @@ PBoolean PSSLChannel::Accept(PChannel * channel, PBoolean autoDelete)
 
 bool PSSLChannel::InternalAccept()
 {
-  return PAssertNULL(m_ssl) != NULL && ConvertOSError(SSL_accept(m_ssl));
+  return PAssertNULL(m_ssl) != NULL && ConvertOSError(SSL_accept((SSL*)m_ssl));
 }
 
 
@@ -2473,13 +2496,13 @@ PBoolean PSSLChannel::Connect(PChannel * channel, PBoolean autoDelete)
 
 bool PSSLChannel::InternalConnect()
 {
-  return PAssertNULL(m_ssl) != NULL && ConvertOSError(SSL_connect(m_ssl));
+  return PAssertNULL(m_ssl) != NULL && ConvertOSError(SSL_connect((SSL*)m_ssl));
 }
 
 
 PBoolean PSSLChannel::AddClientCA(const PSSLCertificate & certificate)
 {
-  return PAssertNULL(m_ssl) != NULL && SSL_add_client_CA(m_ssl, certificate);
+  return PAssertNULL(m_ssl) != NULL && SSL_add_client_CA((SSL*)m_ssl, certificate);
 }
 
 
@@ -2489,7 +2512,7 @@ PBoolean PSSLChannel::AddClientCA(const PList<PSSLCertificate> & certificates)
     return false;
 
   for (PList<PSSLCertificate>::const_iterator it = certificates.begin(); it != certificates.end(); ++it) {
-    if (!SSL_add_client_CA(m_ssl, *it))
+    if (!SSL_add_client_CA((SSL*)m_ssl, *it))
       return false;
   }
 
@@ -2499,15 +2522,15 @@ PBoolean PSSLChannel::AddClientCA(const PList<PSSLCertificate> & certificates)
 
 PBoolean PSSLChannel::UseCertificate(const PSSLCertificate & certificate)
 {
-  return PAssertNULL(m_ssl) != NULL && SSL_use_certificate(m_ssl, certificate);
+  return PAssertNULL(m_ssl) != NULL && SSL_use_certificate((SSL*)m_ssl, certificate);
 }
 
 
 PBoolean PSSLChannel::UsePrivateKey(const PSSLPrivateKey & key)
 {
   return PAssertNULL(m_ssl) != NULL &&
-         SSL_use_PrivateKey(m_ssl, key) > 0 &&
-         SSL_check_private_key(m_ssl);
+         SSL_use_PrivateKey((SSL*)m_ssl, key) > 0 &&
+         SSL_check_private_key((SSL*)m_ssl);
 }
 
 
@@ -2519,7 +2542,7 @@ PString PSSLChannel::GetCipherList() const
   PStringStream strm;
   int i = -1;
   const char * str;
-  while ((str = SSL_get_cipher_list(m_ssl,++i)) != NULL) {
+  while ((str = SSL_get_cipher_list((SSL*)m_ssl,++i)) != NULL) {
     if (i > 0)
       strm << ':';
     strm << str;
@@ -2534,7 +2557,7 @@ void PSSLChannel::SetVerifyMode(VerifyMode mode, const VerifyNotifier & notifier
   m_verifyNotifier = notifier;
 
   if (PAssertNULL(m_ssl) != NULL)
-    SSL_set_verify(m_ssl, VerifyModeBits[mode], VerifyCallback);
+    SSL_set_verify((SSL*)m_ssl, VerifyModeBits[mode], VerifyCallback);
 }
 
 
@@ -2554,8 +2577,8 @@ bool PSSLChannel::GetPeerCertificate(PSSLCertificate & certificate, PString * er
   if (PAssertNULL(m_ssl) == NULL)
     return false;
 
-  long err = SSL_get_verify_result(m_ssl);
-  certificate.Attach(SSL_get_peer_certificate(m_ssl));
+  long err = SSL_get_verify_result((SSL*)m_ssl);
+  certificate.Attach(SSL_get_peer_certificate((SSL*)m_ssl));
 
   if (err == X509_V_OK && certificate.IsValid())
     return true;
@@ -2567,13 +2590,13 @@ bool PSSLChannel::GetPeerCertificate(PSSLCertificate & certificate, PString * er
       *error = "Peer did not offer certificate";
   }
 
-  return (SSL_get_verify_mode(m_ssl)&SSL_VERIFY_FAIL_IF_NO_PEER_CERT) == 0;
+  return (SSL_get_verify_mode((SSL*)m_ssl)&SSL_VERIFY_FAIL_IF_NO_PEER_CERT) == 0;
 }
 
 
 long PSSLChannel::BioControl(bio_st * bio, int cmd, long num, void * ptr)
 {
-  return bio != NULL && bio->ptr != NULL ? reinterpret_cast<PSSLChannel *>(bio->ptr)->BioControl(cmd, num, ptr) : 0;
+  return bio != NULL && BIO_get_data(bio) != NULL ? reinterpret_cast<PSSLChannel *>(BIO_get_data(bio))->BioControl(cmd, num, ptr) : 0;
 }
 
 
@@ -2581,11 +2604,13 @@ long PSSLChannel::BioControl(int cmd, long num, void * /*ptr*/)
 {
   switch (cmd) {
     case BIO_CTRL_SET_CLOSE:
-      m_bio->shutdown = (int)num;
+      BIO_set_shutdown((BIO*)m_bio, num);
+//      m_bio->shutdown = (int)num;
       return 1;
 
     case BIO_CTRL_GET_CLOSE:
-      return m_bio->shutdown;
+      return BIO_get_shutdown((BIO*)m_bio);
+//      return m_bio->shutdown;
 
     case BIO_CTRL_FLUSH:
       return 1;
@@ -2627,9 +2652,9 @@ bool PSSLChannelDTLS::SetMTU(unsigned mtu)
     mtu = 65535;
 
 #ifdef SSL_OP_NO_QUERY_MTU
-  SSL_set_options(m_ssl, SSL_OP_NO_QUERY_MTU);
+  SSL_set_options((SSL*)m_ssl, SSL_OP_NO_QUERY_MTU);
 #endif
-  SSL_set_mtu(m_ssl, mtu);
+  SSL_set_mtu((SSL*)m_ssl, mtu);
   return true;
 }
 
@@ -2641,24 +2666,24 @@ bool PSSLChannelDTLS::ExecuteHandshake()
 
   PTRACE(5, "DTLS executing handshake.");
 
-  SSL_set_mode(m_ssl, SSL_MODE_AUTO_RETRY);
-  SSL_set_read_ahead(m_ssl, 1);
-  SSL_CTX_set_read_ahead(*m_context, 1);
+  SSL_set_mode((SSL*)m_ssl, SSL_MODE_AUTO_RETRY);
+  SSL_set_read_ahead((SSL*)m_ssl, 1);
+  SSL_CTX_set_read_ahead((SSL_CTX*)(void*)*m_context, 1);
 
-  int errorCode = SSL_do_handshake(m_ssl);
+  int errorCode = SSL_do_handshake((SSL*)m_ssl);
   if (errorCode == 1) {
     PTRACE(3, "DTLS handshake successful.");
     return true;
   }
 
-  PTRACE_IF(2, IsOpen(), "DTLS handshake failed (" << errorCode <<") - " << PSSLError(SSL_get_error(m_ssl, errorCode)));
+  PTRACE_IF(2, IsOpen(), "DTLS handshake failed (" << errorCode <<") - " << PSSLError(SSL_get_error((SSL*)m_ssl, errorCode)));
   return false;
 }
 
 
 bool PSSLChannelDTLS::IsServer() const
 {
-  return PAssertNULL(m_ssl) != NULL && m_ssl->server;
+  return PAssertNULL(m_ssl) != NULL && SSL_is_server((SSL*)m_ssl);
 }
 
 
@@ -2668,7 +2693,7 @@ PCaselessString PSSLChannelDTLS::GetSelectedProfile() const
     return PString::Empty();
 
 #if P_SSL_SRTP
-  SRTP_PROTECTION_PROFILE *p = SSL_get_selected_srtp_profile(m_ssl);
+  SRTP_PROTECTION_PROFILE *p = SSL_get_selected_srtp_profile((SSL*)m_ssl);
   if (p != NULL)
     return p->name;
 
@@ -2686,7 +2711,7 @@ PBYTEArray PSSLChannelDTLS::GetKeyMaterial(PINDEX materialSize, const char * nam
 #if P_SSL_SRTP
   if (PAssert(materialSize > 0 && name != NULL && *name != '\0', PInvalidParameter)) {
     PBYTEArray result;
-    if (SSL_export_keying_material(m_ssl,
+    if (SSL_export_keying_material((SSL*)m_ssl,
                                    result.GetPointer(materialSize), materialSize,
                                    name, strlen(name),
                                    NULL, 0, 0) == 1)
@@ -2705,7 +2730,7 @@ bool PSSLChannelDTLS::InternalAccept()
   if (PAssertNULL(m_ssl) == NULL)
     return false;
 
-  SSL_set_accept_state(m_ssl);
+  SSL_set_accept_state((SSL*)m_ssl);
   return true;
 }
 
@@ -2715,7 +2740,7 @@ bool PSSLChannelDTLS::InternalConnect()
   if (PAssertNULL(m_ssl) == NULL)
     return false;
 
-  SSL_set_connect_state(m_ssl);
+  SSL_set_connect_state((SSL*)m_ssl);
   return true;
 }
 #endif // P_SSL

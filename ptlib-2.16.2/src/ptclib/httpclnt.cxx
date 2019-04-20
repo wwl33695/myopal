@@ -794,7 +794,7 @@ bool PHTTPClient::ConnectURL(const PURL & url)
         return false;
       }
 
-      PSSLContext * context = new PSSLContext(method);
+      PSSLContext * context = new PSSLContext(method, NULL, 0);
       if (!context->SetCredentials(m_authority, m_certificate, m_privateKey)) {
         lastResponseCode = TransportConnectError;
         lastResponseInfo = "Could not set certificates";
