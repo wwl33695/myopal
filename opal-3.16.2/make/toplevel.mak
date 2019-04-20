@@ -113,9 +113,9 @@ VPATH_CXX := $(OPAL_SRCDIR)/opal \
              $(OPAL_SRCDIR)/t38 \
              $(OPAL_SRCDIR)/im
 
-ifeq ($(OPAL_PTLIB_ASN), yes)
+#ifeq ($(OPAL_PTLIB_ASN), yes)
   VPATH_CXX += $(ASN_SRCDIR)
-endif
+#endif
 
 VPATH_C := $(OPAL_SRCDIR)/codec
 
@@ -165,9 +165,9 @@ ifeq ($(OPAL_HAS_MIXER), yes)
   endif
 endif
 
-ifeq ($(OPAL_HAS_PCSS), yes)
+#ifeq ($(OPAL_HAS_PCSS), yes)
   SOURCES += $(OPAL_SRCDIR)/ep/pcss.cxx
-endif
+#endif
 
 ifeq ($(OPAL_GSTREAMER),yes)
   SOURCES += $(OPAL_SRCDIR)/ep/GstEndPoint.cxx
@@ -176,16 +176,16 @@ endif
 
 ########################################
 
-ifeq ($(OPAL_H323),yes)
+#ifeq ($(OPAL_H323),yes)
   VPATH_CXX += $(OPAL_SRCDIR)/h323 \
                $(OPAL_SRCDIR)/t120
 
   SIMPLE_ASN_FILES := x880 mcs gcc
 
-  ifeq ($(OPAL_H450),yes)
+#  ifeq ($(OPAL_H450),yes)
     SIMPLE_ASN_FILES += h4501 h4502 h4503 h4504 h4505 h4506 h4507 h4508 h4509 h45010 h45011
     SOURCES          += $(OPAL_SRCDIR)/h323/h450pdu.cxx 
-  endif
+#  endif
 
   ASN_H_FILES   := $(addprefix $(ASN_INCDIR)/,$(addsuffix .h,  $(SIMPLE_ASN_FILES)))
   ASN_CXX_FILES := $(addprefix $(ASN_SRCDIR)/,$(addsuffix .cxx,$(SIMPLE_ASN_FILES)))
@@ -276,7 +276,7 @@ ifeq ($(OPAL_H323),yes)
                $(OPAL_SRCDIR)/h323/h235_session.cxx 
   endif
 
-endif # OPAL_H323
+#endif # OPAL_H323
 
 
 ########################################

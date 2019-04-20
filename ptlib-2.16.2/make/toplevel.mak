@@ -203,13 +203,13 @@ endif
     SOURCES += $(PLATFORM_SRC_DIR)/shmvideo.cxx
   endif
 
-  ifeq ($(HAS_VFW_CAPTURE),1)
+#  ifeq ($(HAS_VFW_CAPTURE),1)
     SOURCES += $(PLATFORM_SRC_DIR)/vfw.cxx
-  endif
-
-#  ifeq ($(HAS_DIRECTSHOW),1)
-    SOURCES += $(PLATFORM_SRC_DIR)/directshow.cxx
 #  endif
+
+  ifeq ($(HAS_DIRECTSHOW),1)
+    SOURCES += $(PLATFORM_SRC_DIR)/directshow.cxx
+  endif
 
   ifeq ($(target_os),Darwin)
     SOURCES += $(PLATFORM_SRC_DIR)/macvidcap.mm

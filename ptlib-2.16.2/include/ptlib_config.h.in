@@ -914,8 +914,8 @@
 
   #else /* defined(_MSC_VER)*/
 
-    #define P_DIRECTSHOW 1
-//    #undef P_DIRECTSHOW
+//    #define P_DIRECTSHOW 1
+    #undef P_DIRECTSHOW
     #define P_VFW_CAPTURE 1
 //    #undef P_VFW_CAPTURE
 

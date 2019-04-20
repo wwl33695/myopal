@@ -40,8 +40,8 @@
 
 // Total insanity ....
 #if _WIN32
-  #include <ptlib.h>
   #include <wx/wx.h>
+  #include <ptlib.h>
 #else
   #include <wx/wx.h>
   #include <ptlib.h>
