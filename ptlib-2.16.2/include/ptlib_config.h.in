@@ -290,17 +290,21 @@
 
 #undef PMEMORY_CHECK
 
-#undef P_AUDIO
-#undef P_VIDEO
+//#undef P_AUDIO
+#define P_AUDIO 1
+//#undef P_VIDEO
+#define P_VIDEO 1
 
 //#undef P_TIMERS
 #define P_TIMERS 1          
 #undef P_REGEX
 #undef P_TTS
-#undef P_ASN
+#define P_ASN 1
+//#undef P_ASN
 #undef P_PIPECHAN
 #undef P_DTMF
-#undef P_WAVFILE
+#define P_WAVFILE 1
+//#undef P_WAVFILE
 #undef P_SOCKS
 #undef P_FTP
 #undef P_TELNET
@@ -910,8 +914,10 @@
 
   #else /* defined(_MSC_VER)*/
 
-    #undef P_DIRECTSHOW
-    #undef P_VFW_CAPTURE
+    #define P_DIRECTSHOW 1
+//    #undef P_DIRECTSHOW
+    #define P_VFW_CAPTURE 1
+//    #undef P_VFW_CAPTURE
 
   #endif /* defined(_MSC_VER)*/
 #endif // P_VIDEO

@@ -282,10 +282,10 @@ ifeq ($(HAS_TTS),1)
   SOURCES += $(COMPONENT_SRC_DIR)/ptts.cxx 
 endif
 
-ifeq ($(HAS_ASN),1)
+#ifeq ($(HAS_ASN),1)
   SOURCES += $(COMPONENT_SRC_DIR)/asner.cxx \
              $(COMPONENT_SRC_DIR)/pasn.cxx 
-endif
+#endif
 
 ifeq ($(HAS_SNMP),1)
   SOURCES += $(COMPONENT_SRC_DIR)/snmpclnt.cxx \
@@ -339,19 +339,19 @@ ifeq ($(HAS_REMCONN),1)
   SOURCES += $(PLATFORM_SRC_DIR)/remconn.cxx 
 endif
 
-ifeq ($(HAS_WAVFILE),1)
+#ifeq ($(HAS_WAVFILE),1)
   SOURCES += $(COMPONENT_SRC_DIR)/pwavfile.cxx \
              $(COMPONENT_SRC_DIR)/pwavfiledev.cxx
-endif
+#endif
 
 ifeq ($(HAS_DTMF),1)
   SOURCES += $(COMPONENT_SRC_DIR)/dtmf.cxx \
              $(COMPONENT_SRC_DIR)/tonedev.cxx 
 endif
 
-ifeq ($(HAS_VCARD),1)
+#ifeq ($(HAS_VCARD),1)
   SOURCES += $(COMPONENT_SRC_DIR)/vcard.cxx 
-endif
+#endif
 
 ifeq ($(HAS_SERIAL),1)
   ifeq ($(target_os),mingw)
@@ -417,9 +417,9 @@ endif
   SOURCES += $(COMPONENT_SRC_DIR)/cypher.cxx
 #endif
 
-ifeq ($(HAS_VARTYPE),1)
+#ifeq ($(HAS_VARTYPE),1)
   SOURCES += $(COMPONENT_SRC_DIR)/vartype.cxx
-endif
+#endif
 
 #ifeq ($(HAS_GUID),1)
   SOURCES += $(COMPONENT_SRC_DIR)/guid.cxx

@@ -49,8 +49,10 @@
 #undef  OPAL_PTLIB_SSL
 #undef  OPAL_PTLIB_ASN
 #undef  OPAL_PTLIB_EXPAT
-#undef  OPAL_PTLIB_AUDIO
-#undef  OPAL_PTLIB_VIDEO
+#define  OPAL_PTLIB_AUDIO 1
+//#undef  OPAL_PTLIB_AUDIO
+#define  OPAL_PTLIB_VIDEO 1
+//#undef  OPAL_PTLIB_VIDEO
 #undef  OPAL_PTLIB_WAVFILE
 #undef  OPAL_PTLIB_DTMF
 #undef  OPAL_PTLIB_IPV6
@@ -115,7 +117,8 @@
 
 // Video
 #if P_VIDEO
-  #undef  OPAL_VIDEO
+  #define  OPAL_VIDEO 1
+//  #undef  OPAL_VIDEO
 #endif
 
 
@@ -127,6 +130,8 @@
 #if P_ASN
   #undef OPAL_H323
 #endif
+#define OPAL_H323 1
+
 #undef  OPAL_SDP
 #if OPAL_SDP
   #undef OPAL_SIP
@@ -152,7 +157,8 @@
 
 #if OPAL_H323
   #if OPAL_VIDEO
-    #undef  OPAL_H239
+    #define  OPAL_H239 1
+//    #undef  OPAL_H239
   #endif
   #undef  OPAL_H501
   
@@ -253,9 +259,11 @@
 
 
 // Far end camera control
-#undef OPAL_HAS_H224
+#define OPAL_HAS_H224 1
+//#undef OPAL_HAS_H224
 #if OPAL_VIDEO && OPAL_HAS_H224
-  #undef OPAL_HAS_H281
+  #define OPAL_HAS_H281 1
+//  #undef OPAL_HAS_H281
 #endif
 
 
