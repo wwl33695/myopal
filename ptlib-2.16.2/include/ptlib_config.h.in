@@ -302,7 +302,8 @@
 #define P_ASN 1
 //#undef P_ASN
 #undef P_PIPECHAN
-#undef P_DTMF
+#define P_DTMF 1
+//#undef P_DTMF
 #define P_WAVFILE 1
 //#undef P_WAVFILE
 #undef P_SOCKS
@@ -550,7 +551,8 @@
 // EXPAT library for XML parsing
 //
 
-#undef P_EXPAT
+#define P_EXPAT 1
+//#undef P_EXPAT
 #undef P_EXPAT_BUILD
 #undef P_EXPAT_WIN32
 #undef P_EXPAT_WIN64
@@ -833,7 +835,8 @@
 // libjpeg support
 //
 
-#undef P_LIBJPEG
+#define P_LIBJPEG 1
+//#undef P_LIBJPEG
 #undef P_LIBJPEG_WIN32
 #undef P_LIBJPEG_WIN64
 

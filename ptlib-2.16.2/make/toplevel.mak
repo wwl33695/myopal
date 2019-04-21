@@ -344,10 +344,10 @@ endif
              $(COMPONENT_SRC_DIR)/pwavfiledev.cxx
 #endif
 
-ifeq ($(HAS_DTMF),1)
+#ifeq ($(HAS_DTMF),1)
   SOURCES += $(COMPONENT_SRC_DIR)/dtmf.cxx \
              $(COMPONENT_SRC_DIR)/tonedev.cxx 
-endif
+#endif
 
 #ifeq ($(HAS_VCARD),1)
   SOURCES += $(COMPONENT_SRC_DIR)/vcard.cxx 
