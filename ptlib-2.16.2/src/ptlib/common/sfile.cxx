@@ -35,6 +35,8 @@
 #pragma implementation "sfile.h"
 #endif
 
+#if 0
+
 #error "sfile.cxx is deprecated - please remove from the build"
 
 #include <ptlib.h>
@@ -96,3 +98,4 @@ void PStructuredFile::SetStructure(Element * struc, PINDEX numElem)
 
 
 // End Of File ///////////////////////////////////////////////////////////////
+#endif
