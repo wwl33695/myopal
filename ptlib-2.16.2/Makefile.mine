@@ -5,8 +5,11 @@ CPP = g++
 CFLAGS = -fPIC -lpthread
 CPPFLAGS = -fPIC -g -w -std=c++11 -I./include
 
-LINK_FLAGS = -w -g -D__STDC_CONSTANT_MACROS
-LIBS =  -lstdc++ -lpthread -lSDL2 -lavutil -lavformat -lavcodec -lswresample -lswscale -lwx_baseu-3.0 -lwx_mswu_core-3.0
+LINK_FLAGS = -fPIC -w -g -D__STDC_CONSTANT_MACROS
+LIBS =  -lstdc++ -lssl -lcrypto -lexpat
+ifeq ($(OS),Windows_NT)
+	LIBS +=  -ljpeg -lregex -lwinmm -lwsock32 -lws2_32 -lsnmpapi -lmpr -lcomdlg32 -lgdi32 -lavicap32 -liphlpapi -lole32 -lquartz
+endif
 #########################################################
 
 PROGRAM = libpt
@@ -17,8 +20,9 @@ OBJS =
 # At least one path should be specified.  
 # SRCDIRS   := .        # current directory  
 SRCDIRS   :=  src/ptclib \
-			  src/ptlib/common
-			  
+			  src/ptlib/common \
+			  src/ptlib/msos
+
 # The source file types (headers excluded).  
 # At least one type should be specified.  
 # The valid suffixes are among of .c, .C, .cc, .cpp, .CPP, .c++, .cp, or .cxx.  
@@ -37,11 +41,12 @@ endif
 DEBUGOBJS = $(patsubst %.o,%.d,$(OBJS))  
 
 $(PROGRAM): $(OBJS)
-	$(CPP) $(LINK_FLAGS) -o $@  $(OBJS) $(LIBS) 
+	$(CPP) $(LINK_FLAGS) -shared -o $@.so  $(OBJS) $(LIBS) 
+	ar cr $@.a $(OBJS)
 
 clean:
 	clear
-	rm -rf $(OBJS) *.o $(PROGRAM)
+	rm -rf $(OBJS) *.o $(PROGRAM).so $(PROGRAM).a
 
 install:
 	cp -f $(PROGRAM) /e/nonsys/tools/video/

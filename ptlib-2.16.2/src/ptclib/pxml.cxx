@@ -58,6 +58,7 @@
 
 #define MY_CONTEXT ((XML_Parser)m_context)
 
+#ifdef P_EXPAT
 
 ////////////////////////////////////////////////////
 
@@ -1761,4 +1762,6 @@ PString EscapeSpecialChars(const PString & str)
 
 #ifndef P_EXPAT
 }; // namespace PXML {
+#endif
+
 #endif
