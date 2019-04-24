@@ -36,6 +36,8 @@
 #pragma implementation "asner.h"
 #endif
 
+#if P_ASN
+
 #include <ptclib/asner.h>
 
 #ifdef P_EXPAT
@@ -2508,4 +2510,5 @@ void PASN_Stream::ByteAlign()
 #include "asnxer.cxx"
 #endif
 
+#endif
 // End of file ////////////////////////////////////////////////////////////////

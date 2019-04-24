@@ -642,7 +642,7 @@ class PSSLCipherContext : public PObject
   protected:
     PadMode             m_padMode;
     void * m_context;
-    bool        m_encrypt;
+    bool m_encrypt;
   
   private:
     PSSLCipherContext(const PSSLCipherContext &) { }

@@ -10,6 +10,8 @@
  * $Date: 2012-10-05 09:53:11 +0100 (Fri, 05 Oct 2012) $
  */
 
+#ifdef P_INCLUDE_PER
+
 ///////////////////////////////////////////////////////////////////////
 
 PBoolean PPER_Stream::NullDecode(PASN_Null &)
@@ -1378,3 +1380,4 @@ void PPER_Stream::AnyTypeEncode(const PASN_Object * value)
 }
 
 ///////////////////////////////////////////////////////////////////////
+#endif

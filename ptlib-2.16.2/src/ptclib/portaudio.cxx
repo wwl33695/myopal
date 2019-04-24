@@ -34,6 +34,8 @@
 
 #include <ptlib/sound.h>
 
+#ifdef P_PORTAUDIO
+
 #include <ptlib/plugin.h>
 #include <ptclib/portaudio.h>
 
@@ -618,6 +620,7 @@ bool PSoundChannelPortAudio::GetMute(bool & oldMute)
   return m_mute;
 }
 
+#endif
 
 // End of File ///////////////////////////////////////////////////////////////
 

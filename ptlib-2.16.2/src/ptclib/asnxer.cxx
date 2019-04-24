@@ -9,6 +9,8 @@
 
 #include <ptclib/pxml.h>
 
+#ifdef P_INCLUDE_XER
+
 ///////////////////////////////////////////////////////////////////////
 
 PBoolean PXER_Stream::NullDecode(PASN_Null &)
@@ -398,3 +400,5 @@ PBoolean PXER_Stream::Write(PChannel &)
 {
   return false;
 }
+
+#endif
