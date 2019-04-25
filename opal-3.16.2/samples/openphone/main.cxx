@@ -1050,10 +1050,7 @@ bool MyManager::Initialise(bool startMinimised)
   m_imEP = new OpalIMEndPoint(*this);
 #endif
 
-#if OPAL_LID
   potsEP = new OpalLineEndPoint(*this);
-#endif
-  
   pcssEP = new MyPCSSEndPoint(*this);
 
   PwxString str;
