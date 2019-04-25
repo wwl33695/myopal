@@ -15,7 +15,8 @@
 #define new PNEW
 
 
-#if ! H323_DISABLE_H235_SRTP
+//#if ! H323_DISABLE_H235_SRTP
+#if P_H323_H235_SRTP
 
 //
 // SrtpCryptoCapability

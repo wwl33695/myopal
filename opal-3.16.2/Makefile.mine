@@ -3,7 +3,7 @@ CPP = g++
 
 ########################################
 CFLAGS = -fPIC -lpthread
-CPPFLAGS = -fPIC -g -w -std=c++11 -I./include
+CPPFLAGS = -fPIC -g -w -std=c++11 -I../ptlib-2.16.2/include -I./include
 
 LINK_FLAGS = -fPIC -w -g -D__STDC_CONSTANT_MACROS
 LIBS =  -lstdc++ -lssl -lcrypto -lexpat
@@ -19,9 +19,7 @@ OBJS =
 # The directories in which source files reside.  
 # At least one path should be specified.  
 # SRCDIRS   := .        # current directory  
-SRCDIRS   :=  src/ptclib \
-			  src/ptlib/common \
-			  src/ptlib/msos
+SRCDIRS   :=  src/asn \
 
 # The source file types (headers excluded).  
 # At least one type should be specified.  
