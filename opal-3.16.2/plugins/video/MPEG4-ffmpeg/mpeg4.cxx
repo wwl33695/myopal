@@ -61,7 +61,7 @@
 #define OPAL_H323 1
 #define OPAL_SIP 1
 
-#include "../../../src/codec/mpeg4mf_inc.cxx"
+#include "../../../src/codec/mpeg4mf_inc.cxx.in"
 
 
 // Needed C++ headers
