@@ -6,7 +6,7 @@ CFLAGS = -fPIC -lpthread -Wfatal-errors
 CPPFLAGS = -Wfatal-errors -fPIC -g -w -std=c++11 -I../ptlib-2.16.2/include -I./include -I$(MINGW_PREFIX)/include/srtp/
 
 LINK_FLAGS = -fPIC -w -g -D__STDC_CONSTANT_MACROS
-LIBS =  -lstdc++ -lssl -lcrypto -lexpat -lsrtp -L../ptlib-2.16.2 -lpt -lspeexdsp 
+LIBS =  -lstdc++ -L../ptlib-2.16.2 -lpt -lssl -lcrypto -lexpat -lsrtp -lspeexdsp 
 ifeq ($(OS),Windows_NT)
 	LIBS +=  -ljpeg -lregex -lwinmm -lwsock32 -lws2_32 -lsnmpapi -lmpr -lcomdlg32 -lgdi32 -lavicap32 -liphlpapi -lole32 -lquartz
 endif

@@ -11,14 +11,14 @@
 #include <ptlib.h>
 
 
-#if P_H323_H235
-//#if ! H323_DISABLE_H235
+//#if P_H323_H235
+#if ! H323_DISABLE_H235
 
 #include "asn/h235.h"
 
 #define new PNEW
 
-#include "h235_t.cxx"
+#include "h235_t.cxx.in"
 
 //
 // ChallengeString

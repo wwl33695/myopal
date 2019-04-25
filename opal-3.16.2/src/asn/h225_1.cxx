@@ -16,7 +16,7 @@
 
 #if ! H323_DISABLE_H225
 
-#include "h235_t.cxx"
+#include "h235_t.cxx.in"
 
 
 
