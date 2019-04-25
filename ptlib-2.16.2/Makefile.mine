@@ -2,8 +2,8 @@ CC  = gcc
 CPP = g++
 
 ########################################
-CFLAGS = -Wfatal-errors -fPIC -lpthread
-CPPFLAGS = -Wfatal-errors -fPIC -g -w -std=c++11 -I./include
+CFLAGS = -Wfatal-errors -fpermissive -fPIC -lpthread
+CPPFLAGS = -Wfatal-errors -fpermissive -fPIC -g -w -std=c++11 -I./include
 
 LINK_FLAGS = -fPIC -w -g -D__STDC_CONSTANT_MACROS
 LIBS =  -lstdc++ -lssl -lcrypto -lexpat
