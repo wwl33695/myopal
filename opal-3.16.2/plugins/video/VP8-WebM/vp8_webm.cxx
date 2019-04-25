@@ -32,7 +32,7 @@
 
 #define OPAL_SIP 1
 
-#include "../../../src/codec/vp8mf_inc.cxx"
+#include "../../../src/codec/vp8mf_inc.cxx.in"
 
 #include <codec/opalplugin.hpp>
 #include "../common/critsect.h"

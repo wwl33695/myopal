@@ -34,7 +34,7 @@
 
 #if OPAL_VIDEO
 
-#include "vp8mf_inc.cxx"
+#include "vp8mf_inc.cxx.in"
 
 #include <opal/mediafmt.h>
 #include <h323/h323caps.h>

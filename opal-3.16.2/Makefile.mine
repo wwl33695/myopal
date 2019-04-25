@@ -57,7 +57,7 @@ DEBUGOBJS = $(patsubst %.o,%.d,$(OBJS))
 
 $(PROGRAM): $(OBJS)
 	$(CPP) $(LINK_FLAGS) -shared -o $@.so  $(OBJS) $(LIBS) 
-	ar cr $@.a $(OBJS)
+#	ar cr $@.a $(OBJS)
 
 clean:
 	clear
