@@ -32,8 +32,6 @@
 #include <ptlib.h>
 #include <opal_config.h>
 
-#if P_CODEC_SPEEXMF
-
 #include <opal/mediafmt.h>
 #include <codec/opalplugin.h>
 #include <h323/h323caps.h>
@@ -88,4 +86,3 @@ FORMAT(WB);
 
 
 // End of File ///////////////////////////////////////////////////////////////
-#endif

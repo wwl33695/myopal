@@ -34,8 +34,6 @@
 
 #include <opal/mediafmt.h>
 
-#if P_CODEC_G728MF
-
 #include <h323/h323caps.h>
 #include <asn/h245.h>
 
@@ -84,4 +82,3 @@ const OpalAudioFormat & GetOpalG728()
 
 
 // End of File ///////////////////////////////////////////////////////////////
-#endif
