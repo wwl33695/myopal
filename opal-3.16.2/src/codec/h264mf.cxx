@@ -35,7 +35,7 @@
 
 #if OPAL_VIDEO
 
-#include "h264mf_inc.cxx"
+#include "h264mf_inc.cxx.in"
 
 #include <opal/mediafmt.h>
 #include <h323/h323caps.h>

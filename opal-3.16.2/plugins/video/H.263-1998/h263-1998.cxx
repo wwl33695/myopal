@@ -52,7 +52,7 @@
 #define OPAL_H323 1
 #define OPAL_SIP 1
 
-#include "../../../src/codec/h263mf_inc.cxx"
+#include "../../../src/codec/h263mf_inc.cxx.in"
 
 #include "rfc2190.h"
 #include "rfc2429.h"

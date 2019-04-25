@@ -44,7 +44,7 @@
 
 #include <codec/opalplugin.h>
 
-#include "../../../src/codec/g7221mf_inc.cxx"
+#include "../../../src/codec/g7221mf_inc.cxx.in"
 
 #ifdef strcasecmp
 #undef strcasecmp

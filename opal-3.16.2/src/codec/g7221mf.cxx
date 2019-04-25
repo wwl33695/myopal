@@ -31,7 +31,7 @@
 
 #include <ptlib.h>
 
-#include "g7221mf_inc.cxx"
+#include "g7221mf_inc.cxx.in"
 
 #include <opal/mediafmt.h>
 #include <codec/opalplugin.h>

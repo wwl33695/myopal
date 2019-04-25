@@ -43,7 +43,7 @@
 #define OPAL_H323 1
 #define OPAL_SIP 1
 
-#include "../../../src/codec/h264mf_inc.cxx"
+#include "../../../src/codec/h264mf_inc.cxx.in"
 
 #include "../common/ffmpeg.h"
 
