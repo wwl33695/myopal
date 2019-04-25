@@ -39,9 +39,10 @@
 
 #include <opal_config.h>
 
+#ifdef HAS_IXJ
+
 #include <lids/ixjlid.h>
 
-#ifdef HAS_IXJ
 
 #include <sys/time.h>
 #include <math.h>

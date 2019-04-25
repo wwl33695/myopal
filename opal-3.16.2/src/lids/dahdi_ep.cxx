@@ -36,6 +36,8 @@
 
 #include <opal_config.h>
 
+#if P_LIDS_DAHDI
+
 #include <lids/dahdi_ep.h>
 
 #define MAX_DTMF_QUEUE_LEN  16
@@ -808,4 +810,4 @@ void DahdiLineInterfaceDevice::FXSChannelInfo::OffHook()
   Flush();
 }
 
-
+#endif

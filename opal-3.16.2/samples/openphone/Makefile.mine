@@ -1,17 +1,41 @@
 CC  = gcc
 CPP = g++
 
+#########################################
+WX_CONFIG := $(firstword $(wildcard $(addsuffix /wx-config,$(subst :, ,$(PATH):/opt/local/Library/Frameworks/wxWidgets.framework/Versions/wxWidgets/3.0/bin))))
+ifneq (,$(WX_CONFIG))
+  WXRC := $(dir $(WX_CONFIG))/wxrc
+else
+  WX_CONFIG := $(firstword $(wildcard $(addsuffix /wxgtk2u-2.8-config,$(subst :, ,$(PATH)))))
+  ifneq (,$(WX_CONFIG))
+    WXRC := $(dir $(WX_CONFIG))/wxrc-gtk2u-2.8
+  else
+    WX_CONFIG := wx-config-3.0
+    ifneq (,$(shell which $(WX_CONFIG) 2>&1))
+      WXRC := wxrc-3.0
+    else
+      WX_CONFIG := wx-config
+      ifneq (,$(shell which $(WX_CONFIG) 2>&1))
+        WXRC := wxrc
+      else
+        $(error Could not find wx-config)
+      endif
+    endif
+  endif
+endif
 ########################################
 CFLAGS = -Wfatal-errors -fPIC -lpthread
 CPPFLAGS = -Wfatal-errors -fPIC -g -W -Wall -std=c++11 -lpthread -I../../../ptlib-2.16.2/include -I../../../opal-3.16.2/include -I$(MINGW_PREFIX)/include/wx-3.0 -I$(MINGW_PREFIX)/lib/wx/include/msw-unicode-3.0 
 
 LINK_FLAGS = -w -g -D__STDC_CONSTANT_MACROS
-LIBS =  -L/usr/lib -lpt -lopal
+LIBS =  -L/usr/lib -lpt -lopal 
+LIBS     += $(shell $(WX_CONFIG) --libs)
 #########################################################
 
 PROGRAM = openphone
 
-OBJS = main.o 
+OBJS = main.o \
+		openphone.o
 
 $(PROGRAM): $(OBJS)
 	$(CPP) $(LINK_FLAGS) -o $@  $(OBJS) $(LIBS) 
