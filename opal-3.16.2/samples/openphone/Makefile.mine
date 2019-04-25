@@ -2,8 +2,8 @@ CC  = gcc
 CPP = g++
 
 ########################################
-CFLAGS = -fPIC -lpthread
-CPPFLAGS = -fPIC -g -W -Wall -std=c++11 -lpthread -I/usr/include -I/usr/include/opal
+CFLAGS = -Wfatal-errors -fPIC -lpthread
+CPPFLAGS = -Wfatal-errors -fPIC -g -W -Wall -std=c++11 -lpthread -I../../../ptlib-2.16.2/include -I../../../opal-3.16.2/include -I$(MINGW_PREFIX)/include/wx-3.0 -I$(MINGW_PREFIX)/lib/wx/include/msw-unicode-3.0 
 
 LINK_FLAGS = -w -g -D__STDC_CONSTANT_MACROS
 LIBS =  -L/usr/lib -lpt -lopal
