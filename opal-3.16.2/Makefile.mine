@@ -3,10 +3,10 @@ CPP = g++
 
 ########################################
 CFLAGS = -fPIC -lpthread -Wfatal-errors
-CPPFLAGS = -Wfatal-errors -fPIC -g -w -std=c++11 -I../ptlib-2.16.2/include -I./include
+CPPFLAGS = -Wfatal-errors -fPIC -g -w -std=c++11 -I../ptlib-2.16.2/include -I./include -I$(MINGW_PREFIX)/include/srtp/
 
 LINK_FLAGS = -fPIC -w -g -D__STDC_CONSTANT_MACROS
-LIBS =  -lstdc++ -lssl -lcrypto -lexpat
+LIBS =  -lstdc++ -lssl -lcrypto -lexpat -lsrtp -L../ptlib-2.16.2 -lpt
 ifeq ($(OS),Windows_NT)
 	LIBS +=  -ljpeg -lregex -lwinmm -lwsock32 -lws2_32 -lsnmpapi -lmpr -lcomdlg32 -lgdi32 -lavicap32 -liphlpapi -lole32 -lquartz
 endif
@@ -28,6 +28,15 @@ SRCDIRS   :=  src/asn \
 			src/iax2 \
 			src/im \
 			src/opal \
+			src/rtp \
+			src/sdp \
+			src/sip \
+			src/t120 \
+			src/t38 \
+
+ifeq ($(OS),Windows_NT)
+	SRCDIRS += src/win32
+endif
 
 # The source file types (headers excluded).  
 # At least one type should be specified.  

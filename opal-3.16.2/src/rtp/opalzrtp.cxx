@@ -2,6 +2,8 @@
 #pragma implementation "zrtp/opalzrtp.h"
 #endif
 
+#ifdef OPAL_ZRTP
+
 #include <zrtp.h>
 #include <ptlib.h>
 #include <opal_config.h>
@@ -270,11 +272,4 @@ void zrtp_play_alert(zrtp_stream_ctx_t * stream_ctx) {
 
 } //extern "C"
 
-
-
-
-
-
-
-
-
+#endif
