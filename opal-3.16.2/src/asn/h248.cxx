@@ -10,8 +10,7 @@
 
 #include <ptlib.h>
 
-//#if ! H323_DISABLE_H248
-#if P_H323_H248
+#if ! H323_DISABLE_H248
 
 #include "asn/h248.h"
 
