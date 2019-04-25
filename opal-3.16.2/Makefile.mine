@@ -2,8 +2,8 @@ CC  = gcc
 CPP = g++
 
 ########################################
-CFLAGS = -fPIC -lpthread
-CPPFLAGS = -fPIC -g -w -std=c++11 -I../ptlib-2.16.2/include -I./include
+CFLAGS = -fPIC -lpthread -Wfatal-errors
+CPPFLAGS = -Wfatal-errors -fPIC -g -w -std=c++11 -I../ptlib-2.16.2/include -I./include
 
 LINK_FLAGS = -fPIC -w -g -D__STDC_CONSTANT_MACROS
 LIBS =  -lstdc++ -lssl -lcrypto -lexpat
@@ -12,7 +12,7 @@ ifeq ($(OS),Windows_NT)
 endif
 #########################################################
 
-PROGRAM = libpt
+PROGRAM = libopal
 
 OBJS = 
 
@@ -20,6 +20,14 @@ OBJS =
 # At least one path should be specified.  
 # SRCDIRS   := .        # current directory  
 SRCDIRS   :=  src/asn \
+			src/codec \
+			src/ep \
+			src/h224 \
+			src/h323 \
+			src/h460 \
+			src/iax2 \
+			src/im \
+			src/opal \
 
 # The source file types (headers excluded).  
 # At least one type should be specified.  

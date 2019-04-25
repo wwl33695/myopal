@@ -9,12 +9,14 @@
 #endif
 
 #include <ptlib.h>
+
+
+#if P_H323_H235
+//#if ! H323_DISABLE_H235
+
 #include "asn/h235.h"
 
 #define new PNEW
-
-
-#if ! H323_DISABLE_H235
 
 #include "h235_t.cxx"
 

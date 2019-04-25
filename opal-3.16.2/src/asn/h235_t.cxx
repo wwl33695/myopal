@@ -7,6 +7,7 @@
 //
 // SIGNED
 //
+#if P_H323_H235
 
 template <class ToBeSigned>
 H235_SIGNED<ToBeSigned>::H235_SIGNED(unsigned tag, PASN_Object::TagClass tagClass)
@@ -304,3 +305,4 @@ PObject * H235_HASHED<ToBeHashed>::Clone() const
 
 
 // End of h235_t.cxx
+#endif
