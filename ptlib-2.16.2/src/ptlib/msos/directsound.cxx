@@ -342,9 +342,9 @@ bool PSoundChannelDirectSound::Open(const Params & params)
   m_deviceName = params.m_device;
   activeDirection = params.m_direction;
   m_available = 0;
-  m_dsMoved = 0ui64;
-  m_moved = 0ui64;
-  m_lost = 0ui64;
+  m_dsMoved = 0;
+  m_moved = 0;
+  m_lost = 0;
 
   // get info for all devices for direction
   PDSoundDeviceInfoVector devices;
@@ -410,7 +410,7 @@ PBoolean PSoundChannelDirectSound::Abort () // public
     // Reset these even when opening
     m_movePos = 0; // reset public read/write position
     m_dsPos = 0; // DirectSound read/write position
-    m_tick.SetInterval(0i64);
+    m_tick.SetInterval(0);
   }
   return true;
 }
@@ -615,7 +615,7 @@ PString PSoundChannelDirectSound::GetErrorText(ErrorGroup group) const // public
 PTimeInterval PSoundChannelDirectSound::GetInterval (void) // private
 {
   PTimeInterval tick = PTimer::Tick();
-  PTimeInterval Interval = (m_tick.GetInterval() == 0i64)? 0i64 : (tick - m_tick);
+  PTimeInterval Interval = (m_tick.GetInterval() == 0)? 0 : (tick - m_tick);
   m_tick = tick;
   return Interval;
 }
@@ -672,7 +672,7 @@ PBoolean PSoundChannelDirectSound::OpenPlaybackBuffer () // private
 
   m_movePos = 0; // reset public read/write position
   m_dsPos = 0; // DirectSound read/write position
-  m_tick.SetInterval(0i64);
+  m_tick.SetInterval(0);
 
   DSBUFFERDESC bufferDescription = {
     sizeof(DSBUFFERDESC),
@@ -681,8 +681,11 @@ PBoolean PSoundChannelDirectSound::OpenPlaybackBuffer () // private
     0,            // reserved
     &m_waveFormat // format
   };
+
+#ifdef DSBCAPS_TRUEPLAYPOSITION
   if (PProcess::IsOSVersion(6, 0)) // Vista
     bufferDescription.dwFlags += DSBCAPS_TRUEPLAYPOSITION;
+#endif
 
   HRESULT result = m_playbackDevice->CreateSoundBuffer(&bufferDescription, &m_playbackBuffer, NULL); 
   if (FAILED(result)) { 
@@ -959,7 +962,7 @@ PBoolean PSoundChannelDirectSound::OpenCaptureBuffer () // private
 
   m_movePos = 0; // reset public read/write position
   m_dsPos = 0; // DirectSound read/write position
-  m_tick.SetInterval(0i64);
+  m_tick.SetInterval(0);
 
   DSCBUFFERDESC bufferDescription = {
     sizeof(DSCBUFFERDESC),

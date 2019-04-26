@@ -898,6 +898,9 @@
 #if P_VIDEO
 
   #define P_VFW_CAPTURE 1
+  #define P_DIRECTSHOW 1
+  #define P_DIRECTSOUND 1
+    
   #if defined(_MSC_VER)
 
     #ifdef _WIN32_WCE
