@@ -49,6 +49,7 @@
 #include <ks.h>
 #include <dsconf.h>
 
+static const GUID GUID_NULL = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 #ifdef _MSC_VER
   #if _MSC_VER >= 1700 && !defined(_USING_V110_SDK71_)
