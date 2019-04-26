@@ -70,7 +70,7 @@ $(PROGRAM): $(OBJS)
 
 clean:
 	clear
-	rm -rf $(OBJS) *.o $(PROGRAM).so $(PROGRAM).a
+	rm -rf $(OBJS) *.o $(PROGRAM).$(SHARED_SUFFIX) $(PROGRAM).$(STATIC_SUFFIX)
 
 install:
 	cp -f $(PROGRAM) /e/nonsys/tools/video/

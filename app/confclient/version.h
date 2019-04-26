@@ -32,7 +32,11 @@
 #ifndef _OpenPhone_VERSION_H
 #define _OpenPhone_VERSION_H
 
-#include "../opal-3.16.2/version.h"
+//#include "../opal-3.16.2/version.h"
+#define MAJOR_VERSION 3
+#define MINOR_VERSION 16
+#define BUILD_TYPE ReleaseCode
+#define BUILD_NUMBER 2
 
 #define	PRODUCT_NAME_TEXT	"Open Phone"
 #define	EXE_NAME_TEXT	        "openphone"
