@@ -2,11 +2,19 @@ CC  = gcc
 CPP = g++
 
 ########################################
+SHARED_SUFFIX := so
+STATIC_SUFFIX := a
+
+ifeq ($(OS),Windows_NT)
+	SHARED_SUFFIX = dll
+	STATIC_SUFFIX = lib
+endif
+
 CFLAGS = -fPIC -lpthread -Wfatal-errors
 CPPFLAGS = -Wfatal-errors -fPIC -g -w -std=c++11 -I../ptlib-2.16.2/include -I./include -I$(MINGW_PREFIX)/include/srtp/
 
 LINK_FLAGS = -fPIC -w -g -D__STDC_CONSTANT_MACROS
-LIBS =  -lstdc++ ../ptlib-2.16.2/libpt.so -lssl -lcrypto -lexpat -lsrtp -lspeexdsp 
+LIBS =  -lstdc++ -L../ptlib-2.16.2 -lpt -lssl -lcrypto -lexpat -lsrtp -lspeexdsp 
 ifeq ($(OS),Windows_NT)
 	LIBS +=  -ljpeg -lregex -lwinmm -lwsock32 -lws2_32 -lsnmpapi -lmpr -lcomdlg32 -lgdi32 -lavicap32 -liphlpapi -lole32 -lquartz -lvfw32
 endif
@@ -57,8 +65,8 @@ endif
 DEBUGOBJS = $(patsubst %.o,%.d,$(OBJS))  
 
 $(PROGRAM): $(OBJS)
-	$(CPP) $(LINK_FLAGS) -shared -o $@.so  $(OBJS) $(LIBS) 
-#	ar cr $@.a $(OBJS)
+	$(CPP) $(LINK_FLAGS) -shared -o $@.$(SHARED_SUFFIX)  $(OBJS) $(LIBS) 
+#	ar cr $@.$(STATIC_SUFFIX) $(OBJS)
 
 clean:
 	clear

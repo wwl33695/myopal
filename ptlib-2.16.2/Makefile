@@ -2,6 +2,14 @@ CC  = gcc
 CPP = g++
 
 ########################################
+SHARED_SUFFIX := so
+STATIC_SUFFIX := a
+
+ifeq ($(OS),Windows_NT)
+	SHARED_SUFFIX = dll
+	STATIC_SUFFIX = lib
+endif
+
 CFLAGS = -Wfatal-errors -fpermissive -fPIC -lpthread
 CPPFLAGS = -Wfatal-errors -fpermissive -fPIC -g -w -std=c++11 -I./include
 
@@ -41,8 +49,8 @@ endif
 DEBUGOBJS = $(patsubst %.o,%.d,$(OBJS))  
 
 $(PROGRAM): $(OBJS)
-	$(CPP) $(LINK_FLAGS) -shared -o $@.so  $(OBJS) $(LIBS) 
-#	ar cr $@.a $(OBJS)
+	$(CPP) $(LINK_FLAGS) -shared -o $@.$(SHARED_SUFFIX)  $(OBJS) $(LIBS) 
+#	ar cr $@.$(STATIC_SUFFIX) $(OBJS)
 
 clean:
 	clear
