@@ -29,8 +29,8 @@ CPPFLAGS = -Wfatal-errors -fPIC -g -w -Wall -std=c++11 -lpthread -I../../../ptli
 CPPFLAGS += $(shell $(WX_CONFIG) --cxxflags)
 
 LINK_FLAGS = -w -g -D__STDC_CONSTANT_MACROS
-LIBS =  -L/usr/lib -lpt -lopal 
-LIBS     += $(shell $(WX_CONFIG) --libs)
+LIBS :=  -L$(MINGW_PREFIX)/lib -lpt -lopal 
+LIBS += $(shell $(WX_CONFIG) --libs)
 #########################################################
 
 PROGRAM = openphone
