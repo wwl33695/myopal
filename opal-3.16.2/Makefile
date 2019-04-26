@@ -1,65 +1,90 @@
-#
-# Makefile
-#
-# Make file for OPAL library
-#
-# Copyright (c) 1993-2012 Equivalence Pty. Ltd.
-#
-# The contents of this file are subject to the Mozilla Public License
-# Version 1.0 (the "License"); you may not use this file except in
-# compliance with the License. You may obtain a copy of the License at
-# http://www.mozilla.org/MPL/
-#
-# Software distributed under the License is distributed on an "AS IS"
-# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
-# the License for the specific language governing rights and limitations
-# under the License.
-#
-# The Original Code is Portable Windows Library.
-#
-# The Initial Developer of the Original Code is Equivalence Pty. Ltd.
-#
-# Contributor(s): ______________________________________.
-#
-# $Revision: 27217 $
-# $Author: rjongbloed $
-# $Date: 2012-03-17 21:28:55 +1100 (Sat, 17 Mar 2012) $
-#
+CC  = gcc
+CPP = g++
 
-# autoconf.mak uses this for if we are run as "make -f ../Makefile"
-TOP_LEVEL_DIR := $(abspath $(dir $(firstword $(MAKEFILE_LIST))))
+########################################
+CFLAGS = -fPIC -lpthread -Wfatal-errors
+CPPFLAGS = -Wfatal-errors -fPIC -g -w -std=c++11 -I../ptlib-2.16.2/include -I./include -I$(MINGW_PREFIX)/include/srtp/
 
-CONFIG_FILES := include/opal_config.h \
-                make/opal_config.mak \
-                opal.pc \
-                opal_cfg.dxy \
-                plugins/plugin_config.mak \
-                plugins/plugin_config.h
+LINK_FLAGS = -fPIC -w -g -D__STDC_CONSTANT_MACROS
+LIBS =  -lstdc++ ../ptlib-2.16.2/libpt.so -lssl -lcrypto -lexpat -lsrtp -lspeexdsp 
+ifeq ($(OS),Windows_NT)
+	LIBS +=  -ljpeg -lregex -lwinmm -lwsock32 -lws2_32 -lsnmpapi -lmpr -lcomdlg32 -lgdi32 -lavicap32 -liphlpapi -lole32 -lquartz -lvfw32
+endif
+#########################################################
 
-PLUGIN_CONFIGURE  := $(TOP_LEVEL_DIR)/plugins/configure
-PLUGIN_ACLOCAL_M4 := $(TOP_LEVEL_DIR)/plugins/aclocal.m4
+PROGRAM = libopal
 
+OBJS = 
 
-PTLIB_MAKE_DIR := $(if $(PTLIBDIR),$(PTLIBDIR)/make,$(shell pkg-config ptlib --variable=makedir))
-ifeq ($(PTLIB_MAKE_DIR),)
-  $(error Cannot build without PTLib installed or PTLIBDIR set)
+# The directories in which source files reside.  
+# At least one path should be specified.  
+# SRCDIRS   := .        # current directory  
+SRCDIRS   :=  src/asn \
+			src/codec \
+			src/ep \
+			src/h224 \
+			src/h323 \
+			src/h460 \
+			src/iax2 \
+			src/im \
+			src/opal \
+			src/rtp \
+			src/sdp \
+			src/sip \
+			src/t120 \
+			src/t38 \
+			src/lids \
+
+ifeq ($(OS),Windows_NT)
+	SRCDIRS += src/win32
 endif
 
-include $(PTLIB_MAKE_DIR)/autoconf.mak
+# The source file types (headers excluded).  
+# At least one type should be specified.  
+# The valid suffixes are among of .c, .C, .cc, .cpp, .CPP, .c++, .cp, or .cxx.  
+# SRCEXTS   := .c      # C program  
+# SRCEXTS   := .cpp    # C++ program  
+# SRCEXTS   := .c .cpp # C/C++ program  
+SRCEXTS   := .cxx .cpp .c
 
-
-ifeq ($(AUTOCONF_AVAILABLE),yes)
-
-  config : $(PLUGIN_CONFIGURE)
-  $(CONFIG_STATUS) : $(PLUGIN_CONFIGURE)
-
-  $(PLUGIN_CONFIGURE): $(PLUGIN_CONFIGURE).ac $(M4_FILES) $(PLUGIN_ACLOCAL_M4)
-	cd $(dir $@) && $(AUTOCONF)
-
-  $(PLUGIN_ACLOCAL_M4):
-	cd $(dir $@) && $(ACLOCAL)
-
+ifneq ($(SRCDIRS),)
+ifneq ($(SRCEXTS),)
+	SOURCES = $(foreach d,$(SRCDIRS),$(wildcard $(addprefix $(d)/*,$(SRCEXTS))))  
+	OBJS += $(foreach x,$(SRCEXTS), $(patsubst %$(x),%.o,$(filter %$(x),$(SOURCES))))  
+endif
 endif
 
+DEBUGOBJS = $(patsubst %.o,%.d,$(OBJS))  
 
-# End of Makefile
+$(PROGRAM): $(OBJS)
+	$(CPP) $(LINK_FLAGS) -shared -o $@.so  $(OBJS) $(LIBS) 
+#	ar cr $@.a $(OBJS)
+
+clean:
+	clear
+	rm -rf $(OBJS) *.o $(PROGRAM).so $(PROGRAM).a
+
+install:
+	cp -f $(PROGRAM) /e/nonsys/tools/video/
+#$(OBJS):%.o :%.c  先用$(OBJS)中的一项，比如foo.o: %.o : %.c  含义为:试着用%.o匹配foo.o。如果成功%就等于foo。如果不成功，  
+# Make就会警告，然后。给foo.o添加依赖文件foo.c(用foo替换了%.c里的%)  
+# 也可以不要下面的这个生成规则，因为下面的 include $(DEF)  就隐含了。此处为了明了，易懂。故留着  
+#compile c source file
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+%.o: %.C
+	$(CC) $(CFLAGS) -c $< -o $@
+
+#compile c++ source file
+%.o: %.cpp
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.cp
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.CPP
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.cc
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.cxx
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.c++
+	$(CPP) $(CPPFLAGS) -c $< -o $@

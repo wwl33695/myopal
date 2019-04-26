@@ -1,45 +1,74 @@
-#
-# Makefile
-#
-# Make file for ptlib library
-#
-# Portable Tools Library
-#
-# Copyright (c) 1993-2012 Equivalence Pty. Ltd.
-#
-# The contents of this file are subject to the Mozilla Public License
-# Version 1.0 (the "License"); you may not use this file except in
-# compliance with the License. You may obtain a copy of the License at
-# http://www.mozilla.org/MPL/
-#
-# Software distributed under the License is distributed on an "AS IS"
-# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
-# the License for the specific language governing rights and limitations
-# under the License.
-#
-# The Original Code is Portable Windows Library.
-#
-# The Initial Developer of the Original Code is Equivalence Pty. Ltd.
-#
-# Contributor(s): ______________________________________.
-#
-# $Revision: 29548 $
-# $Author: rjongbloed $
-# $Date: 2013-04-22 09:42:49 +0100 (Mon, 22 Apr 2013) $
-#
+CC  = gcc
+CPP = g++
 
-# autoconf.mak uses this for if we are run as "make -f ../Makefile"
-TOP_LEVEL_DIR := $(abspath $(dir $(firstword $(MAKEFILE_LIST))))
+########################################
+CFLAGS = -Wfatal-errors -fpermissive -fPIC -lpthread
+CPPFLAGS = -Wfatal-errors -fpermissive -fPIC -g -w -std=c++11 -I./include
 
-# All the configure outputs are relative to $(TARGET_DIR) not $(TOP_LEVEL_DIR)
-# Note: TARGET_DIR is defined by autoconf.mak so must be relative paths
-CONFIG_FILES := include/ptlib_config.h \
-                make/ptlib_config.mak \
-                ptlib_cfg.dxy \
-                ptlib.pc \
+LINK_FLAGS = -fPIC -w -g -D__STDC_CONSTANT_MACROS
+LIBS =  -lstdc++ -lssl -lcrypto -lexpat
+ifeq ($(OS),Windows_NT)
+	LIBS +=  -ljpeg -lregex -lwinmm -lwsock32 -lws2_32 -lsnmpapi -lmpr -lcomdlg32 -lgdi32 -lavicap32 -liphlpapi -lole32 -lquartz
+endif
+#########################################################
 
+PROGRAM = libpt
 
-include $(TOP_LEVEL_DIR)/make/autoconf.mak
+OBJS = 
 
+# The directories in which source files reside.  
+# At least one path should be specified.  
+# SRCDIRS   := .        # current directory  
+SRCDIRS   :=  src/ptclib \
+			  src/ptlib/common \
+			  src/ptlib/msos
 
-# End of Makefile.in
+# The source file types (headers excluded).  
+# At least one type should be specified.  
+# The valid suffixes are among of .c, .C, .cc, .cpp, .CPP, .c++, .cp, or .cxx.  
+# SRCEXTS   := .c      # C program  
+# SRCEXTS   := .cpp    # C++ program  
+# SRCEXTS   := .c .cpp # C/C++ program  
+SRCEXTS   := .cxx 
+
+ifneq ($(SRCDIRS),)
+ifneq ($(SRCEXTS),)
+	SOURCES = $(foreach d,$(SRCDIRS),$(wildcard $(addprefix $(d)/*,$(SRCEXTS))))  
+	OBJS += $(foreach x,$(SRCEXTS), $(patsubst %$(x),%.o,$(filter %$(x),$(SOURCES))))  
+endif
+endif
+
+DEBUGOBJS = $(patsubst %.o,%.d,$(OBJS))  
+
+$(PROGRAM): $(OBJS)
+	$(CPP) $(LINK_FLAGS) -shared -o $@.so  $(OBJS) $(LIBS) 
+#	ar cr $@.a $(OBJS)
+
+clean:
+	clear
+	rm -rf $(OBJS) *.o $(PROGRAM).so $(PROGRAM).a
+
+install:
+	cp -f $(PROGRAM) /e/nonsys/tools/video/
+#$(OBJS):%.o :%.c  先用$(OBJS)中的一项，比如foo.o: %.o : %.c  含义为:试着用%.o匹配foo.o。如果成功%就等于foo。如果不成功，  
+# Make就会警告，然后。给foo.o添加依赖文件foo.c(用foo替换了%.c里的%)  
+# 也可以不要下面的这个生成规则，因为下面的 include $(DEF)  就隐含了。此处为了明了，易懂。故留着  
+#compile c source file
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+%.o: %.C
+	$(CC) $(CFLAGS) -c $< -o $@
+
+#compile c++ source file
+%.o: %.cpp
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.cp
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.CPP
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.cc
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.cxx
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.c++
+	$(CPP) $(CPPFLAGS) -c $< -o $@
