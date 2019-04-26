@@ -16,8 +16,8 @@ CPPFLAGS = -Wfatal-errors -fpermissive -fPIC -g -w -std=c++11 -I./include
 LINK_FLAGS = -fPIC -w -g -D__STDC_CONSTANT_MACROS
 LIBS =  -lstdc++ -lssl -lcrypto -lexpat
 ifeq ($(OS),Windows_NT)
-	LIBS +=  -ljpeg -lregex -lwinmm -lwsock32 -lws2_32 -lsnmpapi -lmpr -lcomdlg32 -lgdi32 -lavicap32 -liphlpapi -lole32 
-	LIBS += -lquartz -ldxguid -ldsound
+	LIBS +=  -ljpeg -lregex -lwinmm -lwsock32 -lws2_32 -lsnmpapi -lmpr -lcomdlg32 -lgdi32 -lavicap32 -liphlpapi -lole32 -loleaut32
+	LIBS += -lquartz -lstrmiids -lksguid -ldxguid -ldsound
 endif
 #########################################################
 
