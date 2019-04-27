@@ -1687,7 +1687,7 @@ static void StartListenerForEP(OpalEndPoint * ep, const vector<PwxString> & allI
 
   if( allInterfaces.empty() )
   {
-    allInterfaces.push_back("sip:udp$0.0.0.0:5066tcp$0.0.0.0:5066");
+    allInterfaces.push_back("sip:udp$0.0.0.0:5066");
     allInterfaces.push_back("sip:tcp$0.0.0.0:5066");    
   }
 
