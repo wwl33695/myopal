@@ -1685,6 +1685,12 @@ static void StartListenerForEP(OpalEndPoint * ep, const vector<PwxString> & allI
   PStringArray interfacesForEP;
   PString prefixAndColon = ep->GetPrefixName() + ':';
 
+  if( allInterfaces.empty() )
+  {
+    allInterfaces.push_back("sip:udp$0.0.0.0:5066tcp$0.0.0.0:5066");
+    allInterfaces.push_back("sip:tcp$0.0.0.0:5066");    
+  }
+
   for (size_t i = 0; i < allInterfaces.size(); i++) {
     PCaselessString iface = allInterfaces[i].p_str();
     if (iface.NumCompare("all:", 4) == PObject::EqualTo)
@@ -1692,6 +1698,8 @@ static void StartListenerForEP(OpalEndPoint * ep, const vector<PwxString> & allI
     else if (iface.NumCompare(prefixAndColon) == PObject::EqualTo)
       interfacesForEP.AppendString(iface.Mid(prefixAndColon.GetLength()));
   }
+
+  LogWindow << ep->GetPrefixName().ToUpper() << " interfacesForEP: " << interfacesForEP << " " << ep->GetDefaultListeners() << endl;
 
   ep->RemoveListener(NULL);
   if (ep->StartListeners(interfacesForEP))
