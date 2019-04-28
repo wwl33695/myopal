@@ -8201,7 +8201,8 @@ void StatisticsPage::UpdateSession(const OpalConnection * connection)
     }
   }
 
-  m_window->Enable(m_isActive);
+  if( m_window )
+    m_window->Enable(m_isActive);
 
   if (!m_isActive) {
     for (size_t i = 0; i < m_fields.size(); i++)
