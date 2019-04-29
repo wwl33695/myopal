@@ -64,6 +64,7 @@
   #pragma pack(16)
   #pragma include_alias(<inttypes.h>, <stdint.h>)
 #elif defined(_WIN32)
+  #include <windows.h>
   #include "stdint.h"
 #else
   #include "plugin_config.h"
