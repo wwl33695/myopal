@@ -41,6 +41,9 @@ OBJS = main.o \
 $(PROGRAM): $(OBJS)
 	$(CPP) $(LINK_FLAGS) -o $@  $(OBJS) $(LIBS) 
 
+#openphone.cxx: openphone.xrc
+#  $(WXRC) openphone.xrc -c -o openphone.cxx
+
 clean:
 	clear
 	rm -rf $(OBJS) *.o $(PROGRAM)
@@ -67,3 +70,4 @@ clean:
 	$(CPP) $(CPPFLAGS) -c $< -o $@
 %.o: %.c++
 	$(CPP) $(CPPFLAGS) -c $< -o $@
+
