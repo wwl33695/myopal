@@ -163,16 +163,19 @@
        #define OPAL_H239 1
   #endif
 /*   #undef OPAL_H501 */
+   #define OPAL_H501 1
   
 /*   #undef OPAL_H450 */
-#define OPAL_H450 1
+    #define OPAL_H450 1
   #if OPAL_H450
     #define H323_H450   OPAL_H450
   #endif
 
 /*   #undef OPAL_H460 */
+     #define OPAL_H460 1
   #if OPAL_H460 && OPAL_PTLIB_NAT
 /*     #undef OPAL_H460_NAT */
+      #define OPAL_H460_NAT 1
     #if OPAL_H460_NAT && P_STUN
       #define OPAL_H460_24 1
       #if OPAL_PTLIB_SSL
@@ -183,6 +186,7 @@
 
   #if OPAL_PTLIB_SSL
 /*     #undef OPAL_H235_6 */
+     #define OPAL_H235_6 1
   #endif
 #endif // OPAL_H323
 

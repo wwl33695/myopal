@@ -2499,15 +2499,15 @@ void PASN_Stream::ByteAlign()
 ///////////////////////////////////////////////////////////////////////
 
 #ifdef  P_INCLUDE_PER
-#include "asnper.cxx"
+#include "asnper.cxx.in"
 #endif
 
 #ifdef  P_INCLUDE_BER
-#include "asnber.cxx"
+#include "asnber.cxx.in"
 #endif
 
 #ifdef  P_INCLUDE_XER
-#include "asnxer.cxx"
+#include "asnxer.cxx.in"
 #endif
 
 #endif

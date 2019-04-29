@@ -1685,12 +1685,14 @@ static void StartListenerForEP(OpalEndPoint * ep, const vector<PwxString> & allI
   PStringArray interfacesForEP;
   PString prefixAndColon = ep->GetPrefixName() + ':';
 
+/*
   if( allInterfaces.empty() )
   {
     allInterfaces.push_back("sip:udp$0.0.0.0:5066");
     allInterfaces.push_back("sip:tcp$0.0.0.0:5066");    
     allInterfaces.push_back("h323:tcp$0.0.0.0:1726");    
   }
+*/
 
   for (size_t i = 0; i < allInterfaces.size(); i++) {
     PCaselessString iface = allInterfaces[i].p_str();

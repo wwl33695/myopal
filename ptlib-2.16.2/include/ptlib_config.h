@@ -301,6 +301,10 @@
 /* #undef P_TTS */
 /* #undef P_ASN */
 #define P_ASN 1
+#define P_INCLUDE_PER 1
+#define P_INCLUDE_BER 1
+#define P_INCLUDE_XER 1
+
 /* #undef P_PIPECHAN */
 /* #undef P_DTMF */
 #define P_DTMF 1
