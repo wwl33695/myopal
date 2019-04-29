@@ -238,10 +238,11 @@
 
 #if OPAL_T38_CAPABILITY && OPAL_PTLIB_ASN && OPAL_STATISTICS
 /*   #undef OPAL_FAX */
+   #undef OPAL_FAX 1
 #endif
 
 #if !OPAL_FAX
-  #define H323_DISABLE_T38 1
+//  #define H323_DISABLE_T38 1
 #endif
 
 
