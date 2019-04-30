@@ -45,7 +45,7 @@ extern "C" {
 #endif
 
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #define EXECUTABLE_NAME "x264plugin_helper.exe"
 #else
@@ -120,7 +120,7 @@ class H264Encoder
 
     bool m_loaded;
 
-  #if WIN32
+  #if _WIN32
     HANDLE m_hStandardError;
     std::string m_errorOutput;
     void CheckStandardError();

@@ -377,7 +377,7 @@ bool H264Encoder::EncodeFrames(const unsigned char * src, unsigned & srcLen,
   static char const PipeTraceName[] = "x264-pipe";
 #endif
 
-#if WIN32
+#if _WIN32
 
 #ifdef __MINGW32__
 static const char DefaultPluginDirs[] = "plugins";
@@ -748,7 +748,7 @@ bool H264Encoder::Load(void * instance)
   static const char ExecutableName[] = EXECUTABLE_NAME;
 
   char executablePath[500];
-#if WIN32
+#if _WIN32
   if (GetModuleFileName(GetModuleHandle("h264_x264_ptplugin.dll"), executablePath, sizeof(executablePath)))
     strcpy(strrchr(executablePath, '\\') + 1, ExecutableName);
   else
