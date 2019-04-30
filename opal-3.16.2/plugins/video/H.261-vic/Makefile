@@ -19,7 +19,7 @@ CFLAGS = -fpermissive -fPIC -lpthread -Wfatal-errors
 CPPFLAGS = -fpermissive -Wfatal-errors -fPIC -g -w -std=c++11 -I../../../include -I../.. -I../common
 
 LINK_FLAGS = -fPIC -w -g -D__STDC_CONSTANT_MACROS
-LIBS =  -lstdc++ -lopenh264 
+LIBS =  -lstdc++  
 ifeq ($(OS),Windows_NT)
 	LIBS +=  
 endif
