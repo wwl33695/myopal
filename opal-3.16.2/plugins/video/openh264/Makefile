@@ -1,43 +1,90 @@
-#
-# Makefile for the Cisco H.264 Video Codec
-#
-# Copyright (C) 2014 Vox Lucida Pty. Ltd.
-#
-# The contents of this file are subject to the Mozilla Public License
-# Version 1.0 (the "License"); you may not use this file except in
-# compliance with the License. You may obtain a copy of the License at
-# http://www.mozilla.org/MPL/
-#
-# Software distributed under the License is distributed on an "AS IS"
-# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
-# the License for the specific language governing rights and limitations
-# under the License.
-#
-# The Original Code is Open H323 library.
-#
-# The Initial Developer of the Original Code is Vox Lucida Pty. Ltd.
-#
-# Contributor(s): ______________________________________.
-#
-# $Revision: 32562 $
-# $Author: rjongbloed $
-# $Date: 2014-08-19 08:51:22 +0100 (Tue, 19 Aug 2014) $
-#
+CC  = gcc
+CPP = g++
 
-BASENAME := openh264
+########################################
+SHARED_SUFFIX := so
+STATIC_SUFFIX := a
 
-COMMONDIR := $(abspath ../common)
-SRCDIR    := $(CURDIR)
-SOURCES   := $(CURDIR)/openh264.cxx \
-             $(COMMONDIR)/encframe.cxx \
-             $(COMMONDIR)/h264frame.cxx \
+ifeq ($(OS),Windows_NT)
+	SHARED_SUFFIX = dll
+	STATIC_SUFFIX = lib
+endif
 
-PLUGIN_LIBS = -lopenh264
+INSTALLDIR := /usr/local/lib
+ifeq ($(OS),Windows_NT)
+	INSTALLDIR = $(MINGW_PREFIX)/lib
+endif
 
-vpath   %.cxx $(COMMONDIR)
+CFLAGS = -fPIC -lpthread -Wfatal-errors
+CPPFLAGS = -Wfatal-errors -fPIC -g -w -std=c++11 -I../ptlib-2.16.2/include -I./include -I./plugins -I$(MINGW_PREFIX)/include/srtp/
 
-INSTALL_DIR = $(VID_PLUGIN_DIR)
-include $(dir $(lastword $(MAKEFILE_LIST)))../../plugin_inc.mak
+LINK_FLAGS = -fPIC -w -g -D__STDC_CONSTANT_MACROS
+LIBS =  -lstdc++ -L../ptlib-2.16.2 -lpt -lssl -lcrypto -lexpat -lsrtp -lspeexdsp -lopenh264 -lavutil -lavcodec
+ifeq ($(OS),Windows_NT)
+	LIBS +=  -ljpeg -lregex -lwinmm -lwsock32 -lws2_32 -lsnmpapi -lmpr -lcomdlg32 -lgdi32 -lavicap32 -liphlpapi -lole32 -lquartz -lvfw32
+endif
+#########################################################
 
+PROGRAM = libopal
 
-###########################################
+OBJS = 
+
+# The directories in which source files reside.  
+# At least one path should be specified.  
+# SRCDIRS   := .        # current directory  
+SRCDIRS   :=  video/openh264
+
+ifeq ($(OS),Windows_NT)
+	SRCDIRS += src/win32
+endif
+
+# The source file types (headers excluded).  
+# At least one type should be specified.  
+# The valid suffixes are among of .c, .C, .cc, .cpp, .CPP, .c++, .cp, or .cxx.  
+# SRCEXTS   := .c      # C program  
+# SRCEXTS   := .cpp    # C++ program  
+# SRCEXTS   := .c .cpp # C/C++ program  
+SRCEXTS   := .cxx .cpp .c
+
+ifneq ($(SRCDIRS),)
+ifneq ($(SRCEXTS),)
+	SOURCES = $(foreach d,$(SRCDIRS),$(wildcard $(addprefix $(d)/*,$(SRCEXTS))))  
+	OBJS += $(foreach x,$(SRCEXTS), $(patsubst %$(x),%.o,$(filter %$(x),$(SOURCES))))  
+endif
+endif
+
+DEBUGOBJS = $(patsubst %.o,%.d,$(OBJS))  
+
+$(PROGRAM): $(OBJS)
+	$(CPP) $(LINK_FLAGS) -shared -o $@.$(SHARED_SUFFIX)  $(OBJS) $(LIBS) 
+#	ar cr $@.$(STATIC_SUFFIX) $(OBJS)
+
+clean:
+	clear
+	rm -rf $(OBJS) *.o $(PROGRAM).$(SHARED_SUFFIX) $(PROGRAM).$(STATIC_SUFFIX)
+
+install:
+	cp -f $(PROGRAM).$(SHARED_SUFFIX) $(INSTALLDIR)
+
+#$(OBJS):%.o :%.c  先用$(OBJS)中的一项，比如foo.o: %.o : %.c  含义为:试着用%.o匹配foo.o。如果成功%就等于foo。如果不成功，  
+# Make就会警告，然后。给foo.o添加依赖文件foo.c(用foo替换了%.c里的%)  
+# 也可以不要下面的这个生成规则，因为下面的 include $(DEF)  就隐含了。此处为了明了，易懂。故留着  
+#compile c source file
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+%.o: %.C
+	$(CC) $(CFLAGS) -c $< -o $@
+
+#compile c++ source file
+%.o: %.cpp
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.cp
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.CPP
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.cc
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.cxx
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.c++
+	$(CPP) $(CPPFLAGS) -c $< -o $@

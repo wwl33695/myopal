@@ -32,23 +32,7 @@ OBJS =
 # The directories in which source files reside.  
 # At least one path should be specified.  
 # SRCDIRS   := .        # current directory  
-SRCDIRS   :=  src/asn \
-			src/codec \
-			src/ep \
-			src/h224 \
-			src/h323 \
-			src/h460 \
-			src/iax2 \
-			src/im \
-			src/opal \
-			src/rtp \
-			src/sdp \
-			src/sip \
-			src/t120 \
-			src/t38 \
-			src/lids \
-			plugins/video/common \
-			plugins/video/openh264 \
+SRCDIRS   :=  video/openh264
 
 ifeq ($(OS),Windows_NT)
 	SRCDIRS += src/win32
