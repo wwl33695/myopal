@@ -1137,7 +1137,7 @@ bool PStandardColourConverter::RGBtoYUV420P(const BYTE * srcFrameBuffer,
 
   if (m_verticalFlip) {
     scanLinePtrRGB += (m_srcFrameHeight - 1) * scanLineSizeRGB;
-    scanLineSizeRGB = -scanLineSizeRGB;
+//    scanLineSizeRGB = -scanLineSizeRGB;
   }
 
   if (m_srcFrameWidth == m_dstFrameWidth && m_srcFrameHeight == m_dstFrameHeight) {
