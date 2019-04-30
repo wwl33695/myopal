@@ -16,27 +16,24 @@ ifeq ($(OS),Windows_NT)
 endif
 
 CFLAGS = -fPIC -lpthread -Wfatal-errors
-CPPFLAGS = -Wfatal-errors -fPIC -g -w -std=c++11 -I../ptlib-2.16.2/include -I./include -I./plugins -I$(MINGW_PREFIX)/include/srtp/
+CPPFLAGS = -Wfatal-errors -fPIC -g -w -std=c++11 -I../../../include -I../.. 
 
 LINK_FLAGS = -fPIC -w -g -D__STDC_CONSTANT_MACROS
-LIBS =  -lstdc++ -L../ptlib-2.16.2 -lpt -lssl -lcrypto -lexpat -lsrtp -lspeexdsp -lopenh264 -lavutil -lavcodec
+LIBS =  -lstdc++ -lopenh264 
 ifeq ($(OS),Windows_NT)
-	LIBS +=  -ljpeg -lregex -lwinmm -lwsock32 -lws2_32 -lsnmpapi -lmpr -lcomdlg32 -lgdi32 -lavicap32 -liphlpapi -lole32 -lquartz -lvfw32
+	LIBS +=  
 endif
 #########################################################
 
-PROGRAM = libopal
+PROGRAM = openh264
 
-OBJS = 
+OBJS = ../common/h264frame.o \
+	../common/encframe.o \
 
 # The directories in which source files reside.  
 # At least one path should be specified.  
 # SRCDIRS   := .        # current directory  
-SRCDIRS   :=  video/openh264
-
-ifeq ($(OS),Windows_NT)
-	SRCDIRS += src/win32
-endif
+SRCDIRS   :=  .
 
 # The source file types (headers excluded).  
 # At least one type should be specified.  
