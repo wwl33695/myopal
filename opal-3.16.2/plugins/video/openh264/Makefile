@@ -24,8 +24,10 @@ ifeq ($(OS),Windows_NT)
 	LIBS +=  
 endif
 #########################################################
+PTPLUGIN_SUFFIX := _ptplugin
+PWPLUGIN_SUFFIX := _pwplugin
 
-PROGRAM = openh264
+PROGRAM = openh264$(PTPLUGIN_SUFFIX)
 
 OBJS = ../common/h264frame.o \
 	../common/encframe.o \
