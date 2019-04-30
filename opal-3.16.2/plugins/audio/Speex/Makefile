@@ -1,80 +1,88 @@
-#
-# Makefile for Speex Codec Plugin
-#
-# Copyright (C) 2004 Post Increment, All Rights Reserved
-#
-# The contents of this file are subject to the Mozilla Public License
-# Version 1.0 (the "License"); you may not use this file except in
-# compliance with the License. You may obtain a copy of the License at
-# http://www.mozilla.org/MPL/
-#
-# Software distributed under the License is distributed on an "AS IS"
-# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
-# the License for the specific language governing rights and limitations
-# under the License.
-#
-# The Original Code is Open H323 library.
-#
-# The Initial Developer of the Original Code is Post Increment
-#
-# Contributor(s): ______________________________________.
-#
-# $Revision: 31344 $
-# $Author: rjongbloed $
-# $Date: 2014-02-02 00:53:57 +0000 (Sun, 02 Feb 2014) $
-#
+CC  = gcc
+CPP = g++
 
-BASENAME := speex
+########################################
+SHARED_SUFFIX := so
+STATIC_SUFFIX := a
 
-SRCDIR   := $(CURDIR)/libspeex
-SOURCES  := $(CURDIR)/speexcodec.cxx 
+ifeq ($(OS),Windows_NT)
+	SHARED_SUFFIX = dll
+	STATIC_SUFFIX = lib
+endif
 
-PLUGIN_CPPFLAGS = $(SPEEX_CFLAGS)
-PLUGIN_LIBS     = $(SPEEX_LIBS)
+INSTALLDIR := /usr/local/lib
+ifeq ($(OS),Windows_NT)
+	INSTALLDIR = $(MINGW_PREFIX)/lib
+endif
 
-PLUGIN_SYSTEM  = $(SPEEX_SYSTEM)
-LOCAL_SOURCES := $(SRCDIR)/bits.c \
-                 $(SRCDIR)/cb_search.c \
-                 $(SRCDIR)/exc_10_16_table.c \
-                 $(SRCDIR)/exc_10_32_table.c \
-                 $(SRCDIR)/exc_20_32_table.c \
-                 $(SRCDIR)/exc_5_256_table.c \
-                 $(SRCDIR)/exc_5_64_table.c \
-                 $(SRCDIR)/exc_8_128_table.c \
-                 $(SRCDIR)/fftwrap.c \
-                 $(SRCDIR)/filters.c \
-                 $(SRCDIR)/gain_table.c \
-                 $(SRCDIR)/gain_table_lbr.c \
-                 $(SRCDIR)/hexc_10_32_table.c \
-                 $(SRCDIR)/hexc_table.c \
-                 $(SRCDIR)/high_lsp_tables.c \
-                 $(SRCDIR)/kiss_fft.c \
-                 $(SRCDIR)/kiss_fftr.c \
-                 $(SRCDIR)/lbr_48k_tables.c \
-                 $(SRCDIR)/lpc.c \
-                 $(SRCDIR)/lsp.c \
-                 $(SRCDIR)/lsp_tables_nb.c \
-                 $(SRCDIR)/ltp.c \
-                 $(SRCDIR)/math_approx.c \
-                 $(SRCDIR)/mdf.c \
-                 $(SRCDIR)/medfilter.c \
-                 $(SRCDIR)/misc.c \
-                 $(SRCDIR)/modes.c \
-                 $(SRCDIR)/nb_celp.c \
-                 $(SRCDIR)/pcm_wrapper.c \
-                 $(SRCDIR)/quant_lsp.c \
-                 $(SRCDIR)/sb_celp.c \
-                 $(SRCDIR)/smallft.c \
-                 $(SRCDIR)/speex.c \
-                 $(SRCDIR)/speex_callbacks.c \
-                 $(SRCDIR)/speex_header.c \
-                 $(SRCDIR)/speex_preprocess.c \
-                 $(SRCDIR)/vbr.c \
-                 $(SRCDIR)/vorbis_psy.c \
-                 $(SRCDIR)/vq.c
+CFLAGS = -fPIC -lpthread -Wfatal-errors  -I../../../include -I../.. 
+CPPFLAGS = -Wfatal-errors -fPIC -g -w -std=c++11 -I../../../include -I../.. 
 
-INSTALL_DIR = $(AUD_PLUGIN_DIR)
-include $(dir $(lastword $(MAKEFILE_LIST)))../../plugin_inc.mak
+LINK_FLAGS = -fPIC -w -g -D__STDC_CONSTANT_MACROS
+LIBS =  -lstdc++ -lspeex
+ifeq ($(OS),Windows_NT)
+	LIBS +=  
+endif
+#########################################################
+PTPLUGIN_SUFFIX := _ptplugin
+PWPLUGIN_SUFFIX := _pwplugin
 
+PROGRAM = speex$(PTPLUGIN_SUFFIX)
 
-###########################################
+OBJS = 
+
+# The directories in which source files reside.  
+# At least one path should be specified.  
+# SRCDIRS   := .        # current directory  
+SRCDIRS   :=  . 
+
+# The source file types (headers excluded).  
+# At least one type should be specified.  
+# The valid suffixes are among of .c, .C, .cc, .cpp, .CPP, .c++, .cp, or .cxx.  
+# SRCEXTS   := .c      # C program  
+# SRCEXTS   := .cpp    # C++ program  
+# SRCEXTS   := .c .cpp # C/C++ program  
+SRCEXTS   := .cxx .cpp .c
+
+ifneq ($(SRCDIRS),)
+ifneq ($(SRCEXTS),)
+	SOURCES = $(foreach d,$(SRCDIRS),$(wildcard $(addprefix $(d)/*,$(SRCEXTS))))  
+	OBJS += $(foreach x,$(SRCEXTS), $(patsubst %$(x),%.o,$(filter %$(x),$(SOURCES))))  
+endif
+endif
+
+DEBUGOBJS = $(patsubst %.o,%.d,$(OBJS))  
+
+$(PROGRAM): $(OBJS)
+	$(CPP) $(LINK_FLAGS) -shared -o $@.$(SHARED_SUFFIX)  $(OBJS) $(LIBS) 
+#	ar cr $@.$(STATIC_SUFFIX) $(OBJS)
+
+clean:
+	clear
+	rm -rf $(OBJS) *.o $(PROGRAM).$(SHARED_SUFFIX) $(PROGRAM).$(STATIC_SUFFIX)
+
+install:
+	cp -f $(PROGRAM).$(SHARED_SUFFIX) $(INSTALLDIR)
+
+#$(OBJS):%.o :%.c  先用$(OBJS)中的一项，比如foo.o: %.o : %.c  含义为:试着用%.o匹配foo.o。如果成功%就等于foo。如果不成功，  
+# Make就会警告，然后。给foo.o添加依赖文件foo.c(用foo替换了%.c里的%)  
+# 也可以不要下面的这个生成规则，因为下面的 include $(DEF)  就隐含了。此处为了明了，易懂。故留着  
+#compile c source file
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+%.o: %.C
+	$(CC) $(CFLAGS) -c $< -o $@
+
+#compile c++ source file
+%.o: %.cpp
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.cp
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.CPP
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.cc
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.cxx
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+%.o: %.c++
+	$(CPP) $(CPPFLAGS) -c $< -o $@
